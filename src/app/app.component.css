@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Content Section */
+.content {
+    flex: 1;
+    /* This ensures content grows to push the footer down */
+}
+
+/* Footer Styling */
+app-footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}

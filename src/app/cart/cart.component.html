@@ -1,0 +1,102 @@
+<div class="card">
+  <div class="row">
+    <!-- left part -->
+    <div class="col-md-8 cart">
+      <div class="title">
+        <div class="row">
+          <div class="col">
+            <h4><b>Shopping Cart</b></h4>
+          </div>
+        </div>
+      </div>
+      <div class="products">
+        <div
+          class="row border-top border-bottom"
+          *ngFor="let orderItem of orderItems; let i = index"
+        >
+          <div class="row main align-items-center">
+            <div class="col-2">
+              <img class="img-fluid" [src]="orderItem.product!.cover" />
+            </div>
+            <div class="col">
+              <div class="row">{{ orderItem.product!.name }}</div>
+            </div>
+            <div class="col">
+              <input
+                matInput
+                type="number"
+                value="1"
+                class="quantity form-control"
+                min="1"
+                max="100"
+                [(ngModel)]="orderItem.quantity"
+                (change)="changeQuantity(i, orderItem.quantity)"
+              />
+            </div>
+            <div class="col">
+              {{ orderItem.unitPrice * orderItem.quantity }} &dollar;
+            </div>
+            <div class="col">
+              <button mat-icon-button (click)="removeProduct(i)">
+                <mat-icon color="warn">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="back-to-shop d-flex flex-row justify-content-between">
+        <button mat-stroked-button class="text-dark">
+          Back to shop<mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-flat-button extended color="warn" (click)="clearCart()">
+          Clear Cart
+        </button>
+      </div>
+    </div>
+    <!-- right part -->
+    <div class="col-md-4 summary">
+      <div>
+        <h4><b>Summary</b></h4>
+      </div>
+      <hr />
+      <ul>
+        <li>
+          <div class="row">
+            <div class="col" style="padding-left: 0">
+              ITEMS {{ totalQuantity() }}
+            </div>
+            <div class="col text-right">{{ calcTotal() }} &dollar;</div>
+          </div>
+        </li>
+        <li class="shipping">
+          <p>Shipping</p>
+          <select [(ngModel)]="deliveryFee">
+            <option
+              *ngFor="let option of deliveryOptions"
+              [value]="option.value"
+              [selected]="option.value == deliveryFee"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </li>
+      </ul>
+
+      <div
+        class="row summary-bottom"
+        style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
+      >
+        <div class="col"><b>Total Price</b></div>
+        <div class="col text-right">{{ calcTotal() + 5 }}&dollar;</div>
+        <button
+          mat-flat-button
+          extended
+          class="checkout-btn"
+          (click)="createOrder()"
+        >
+          CHECKOUT
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

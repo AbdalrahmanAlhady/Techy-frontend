@@ -1,0 +1,17 @@
+<nav>
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [ngClass]="{ disabled: isPerviousDisabled()}">
+      <a class="page-link" (click)="previous()">Previous</a>
+    </li>
+    <div *ngFor="let page of pages; let i = index">
+      <li
+        class="page-item"
+        [ngClass]="{ active: isCurrentPage(i+1) }"
+      >
+        <a class="page-link" (click)="getPage(i+1)">{{ page }}</a>
+      </li>
+    </div>
+
+    <li class="page-item" [ngClass]="{ disabled: isNextDisabled()}"><a class="page-link" (click)="next()">Next</a></li>
+  </ul>
+</nav>

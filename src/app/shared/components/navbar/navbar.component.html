@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container px-4 px-lg-5">
+
+    <app-logo [width]="60" [height]="60" [routerLink]="['/']"></app-logo>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse justify-content-end"
+      id="navbarSupportedContent"
+    >
+      <button mat-button class="text-dark" (click)="toCart()">
+        <mat-icon
+         [matBadge]="cartLength"
+          matBadgePosition="after"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          aria-hidden="false"
+          >shopping_cart</mat-icon
+        >
+      </button>
+      <button mat-button [matMenuTriggerFor]="menu" class="text-dark">
+        <mat-icon>person</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Profile</button>
+        <button mat-menu-item>My orders</button>
+        <button mat-menu-item>Dashboard</button>
+        <button mat-menu-item>Logout</button>
+      </mat-menu>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,14 @@
+<owl-carousel-o [options]="customOptions">
+  <ng-container *ngFor="let product of products; let i = index">
+    <ng-template carouselSlide>
+      <div carouselSlide>
+        <img
+
+          [class]="product.id + '-cover'"
+          [src]="product.cover"
+          [alt]="product.id + '-cover'"
+        />
+      </div>
+    </ng-template>
+  </ng-container>
+</owl-carousel-o>

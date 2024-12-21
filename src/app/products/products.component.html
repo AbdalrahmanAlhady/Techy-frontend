@@ -1,0 +1,18 @@
+<!-- Header-->
+<header class="bg-gray py-5">
+  <div class="container px-4 px-lg-5 my-5 carsousel-container shadow p-3 mb-5 bg-white rounded">
+   <app-carousel *ngIf="products.length>0" [products]="products"></app-carousel>
+  </div>
+</header>
+<!-- Section-->
+<section class="py-5">
+  <div class="container px-4 px-lg-5 mt-5 ">
+    <div
+      class=" row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center"
+    >
+      <app-product-card [product]="Product" *ngFor="let Product of products"></app-product-card>
+    </div>
+    <app-pagination></app-pagination>
+  </div>
+</section>
+
