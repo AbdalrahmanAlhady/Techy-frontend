@@ -1,11 +1,11 @@
 import { gql } from 'apollo-angular';
 
-export const GET_ORDERS_COUNT = gql`
+export const GET_ORDERS_COUNT_QUERY = gql`
   query Query($options: QueryOptionsInput) {
     ordersCount(options: $options)
   }
 `;
-export const ORDERS_QUERY = gql`
+export const GET_ORDERS_QUERY = gql`
   query Orders($options: QueryOptionsInput, $ordersId: String) {
     orders(options: $options, id: $ordersId) {
       id
@@ -23,12 +23,10 @@ export const ORDERS_QUERY = gql`
         quantity
         unitPrice
         totalPrice
-       
       }
     }
   }
 `;
-
 export const CREATE_ORDER_MUTATION = gql`
   mutation CreateOrder(
     $orderItems: [OrderItemInput!]!
@@ -56,5 +54,41 @@ export const CREATE_ORDER_MUTATION = gql`
         totalPrice
       }
     }
+  }
+`;
+export const UPDATE_ORDER_MUTATION = gql`
+  mutation UpdateOrder(
+    $orderId: String!
+    $deliveryFee: Float
+    $totalAmount: Float
+    $orderStatus: String
+  ) {
+    updateOrder(
+      id: $orderId
+      deliveryFee: $deliveryFee
+      totalAmount: $totalAmount
+      orderStatus: $orderStatus
+    ) {
+      id
+      orderStatus
+      address
+      deliveryFee
+      totalAmount
+      user {
+        firstName
+        lastName
+      }
+      orderItems {
+        id
+        quantity
+        unitPrice
+        totalPrice
+      }
+    }
+  }
+`;
+export const DELETE_ORDER_MUTATION = gql`
+  mutation DeleteOrder($orderId: String!) {
+    deleteOrder(id: $orderId)
   }
 `;

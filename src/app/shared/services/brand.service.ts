@@ -1,11 +1,16 @@
 import { Injectable, signal } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, MutationResult } from 'apollo-angular';
 import { GQLQueryOptions } from '../models/GQLQueryOptions';
 import { Observable } from 'rxjs';
 import { ApolloQueryResult } from '@apollo/client/core';
 
 import { Brand } from '../models/Brand';
-import { BRANDS_QUERY, GET_BRANDS_COUNT } from '../gql/brand-gql';
+import {
+  GET_BRANDS_QUERY,
+  GET_BRANDS_COUNT_QUERY,
+  UPDATE_BRAND_MUTATION,
+  CREATE_BRAND_MUTATION,
+} from '../gql/brand-gql';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +24,7 @@ export class BrandService {
     options?: GQLQueryOptions
   ): Observable<ApolloQueryResult<{ brandsCount: number }>> {
     return this.apollo.watchQuery<{ brandsCount: number }>({
-      query: GET_BRANDS_COUNT,
+      query: GET_BRANDS_COUNT_QUERY,
       variables: {
         options: options,
       },
@@ -30,11 +35,43 @@ export class BrandService {
     id?: string
   ): Observable<ApolloQueryResult<{ brands: Brand[] }>> {
     return this.apollo.watchQuery<{ brands: Brand[] }>({
-      query: BRANDS_QUERY,
+      query: GET_BRANDS_QUERY,
       variables: {
-        id: id,
-        options: options,
+        id,
+        options,
       },
     }).valueChanges;
+  }
+  createBrand(
+    name: string
+  ): Observable<MutationResult<{ createBrand: Brand }>> {
+    return this.apollo.mutate<{ createBrand: Brand }>({
+      mutation: CREATE_BRAND_MUTATION,
+      variables: {
+        name,
+      },
+    });
+  }
+  updateBrand(
+    id: string,
+    name: string
+  ): Observable<MutationResult<{ updateBrand: Brand }>> {
+    return this.apollo.mutate<{ updateBrand: Brand }>({
+      mutation: UPDATE_BRAND_MUTATION,
+      variables: {
+        id,
+        name,
+      },
+    });
+  }
+  deleteBrand(
+    id: string
+  ): Observable<MutationResult<{ deleteBrand: boolean }>> {
+    return this.apollo.mutate<{ deleteBrand: boolean }>({
+      mutation: UPDATE_BRAND_MUTATION,
+      variables: {
+        id,
+      },
+    });
   }
 }

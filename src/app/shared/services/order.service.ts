@@ -8,8 +8,10 @@ import { ApolloQueryResult } from '@apollo/client/core';
 import { Order } from '../models/Order';
 import {
   CREATE_ORDER_MUTATION,
-  GET_ORDERS_COUNT,
-  ORDERS_QUERY,
+  DELETE_ORDER_MUTATION,
+  GET_ORDERS_COUNT_QUERY,
+  GET_ORDERS_QUERY,
+  UPDATE_ORDER_MUTATION,
 } from '../gql/order-gql';
 
 @Injectable({
@@ -24,7 +26,7 @@ export class OrderService {
     options?: GQLQueryOptions
   ): Observable<ApolloQueryResult<{ ordersCount: number }>> {
     return this.apollo.watchQuery<{ ordersCount: number }>({
-      query: GET_ORDERS_COUNT,
+      query: GET_ORDERS_COUNT_QUERY,
       variables: {
         options: options,
       },
@@ -36,14 +38,13 @@ export class OrderService {
     id?: string
   ): Observable<ApolloQueryResult<{ orders: Order[] }>> {
     return this.apollo.watchQuery<{ orders: Order[] }>({
-      query: ORDERS_QUERY,
+      query: GET_ORDERS_QUERY,
       variables: {
         id: id,
         options: options,
       },
     }).valueChanges;
   }
-
   createOrder(
     orderItems: OrderItem[],
     userId: string,
@@ -58,7 +59,33 @@ export class OrderService {
         userId,
         totalAmount,
         deliveryFee,
-        address
+        address,
+      },
+    });
+  }
+  updateOrder(
+    orderId: string,
+    deliveryFee: number,
+    totalAmount: number,
+    orderStatus: string
+  ): Observable<MutationResult<{ updateOrder: Order }>> {
+    return this.apollo.mutate<{ updateOrder: Order }>({
+      mutation: UPDATE_ORDER_MUTATION,
+      variables: {
+        orderId,
+        deliveryFee,
+        totalAmount,
+        orderStatus,
+      },
+    });
+  }
+  deleteOrder(
+    orderId: string
+  ): Observable<MutationResult<{ deleteOrder: boolean }>> {
+    return this.apollo.mutate<{ deleteOrder: boolean }>({
+      mutation: DELETE_ORDER_MUTATION,
+      variables: {
+        orderId,
       },
     });
   }
