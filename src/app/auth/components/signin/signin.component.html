@@ -1,0 +1,130 @@
+<div class="d-flex flex-row container">
+  <!-- signin form -->
+  <form
+    [formGroup]="signinForm"
+    #form="ngForm"
+    *ngIf="!forgetPasswordMode"
+    class="shadow"
+  >
+    <h2>Sign in</h2>
+    <div class="d-flex flex-column">
+      <!-- email -->
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input
+          formControlName="email"
+          id="email"
+          matInput
+          placeholder="example@gmail.com"
+          type="email"
+        />
+        <mat-icon matSuffix> email</mat-icon>
+        <mat-error *ngIf="signinForm.controls['email'].touched && signinForm.controls['email'].errors">
+          {{ customValidator.getErrorMessage("email", signinForm) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- password -->
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          formControlName="password"
+          id="password"
+          matInput
+          placeholder="Enter Password"
+          type="password"
+        />
+        <mat-icon matSuffix> password</mat-icon>
+        <mat-error *ngIf="signinForm.controls['password'].touched && signinForm.controls['password'].errors">
+          {{ customValidator.getErrorMessage("password", signinForm) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="backendError" class="backend-err">
+      {{ backendError }}
+    </mat-error>
+    <div class="submit-btn d-flex flex-column justify-content-center mx-auto">
+      <button
+        [disabled]="!signinForm.valid"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="signin(form.value)"
+      >
+        Signin
+      </button>
+    </div>
+    <p class="account">
+      Don't have account?
+      <a routerLink="/signup">Signup</a>
+    </p>
+    <p class="account">
+      Forget Password?
+      <a (click)="forgetPasswordMode = true" style="color: blue"
+        >Reset Password</a
+      >
+    </p>
+  </form>
+  <!--send Otp for forget password form -->
+  <form
+    [formGroup]="sendOtpForm"
+    #form2="ngForm"
+    *ngIf="forgetPasswordMode"
+    class="shadow"
+  >
+    <h2>Enter your E-mail to reset password</h2>
+    <div class="d-flex flex-column">
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input
+          formControlName="email"
+          id="email"
+          matInput
+          placeholder="example@gmail.com"
+          type="email"
+        />
+        <mat-icon matSuffix> email</mat-icon>
+        <mat-error *ngIf="sendOtpForm.controls['email'].touched && sendOtpForm.controls['email'].errors">
+          {{ customValidator.getErrorMessage("email", signinForm) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="backendError" class="backend-err">
+      {{ backendError }}
+    </mat-error>
+    <div class="submit-btn d-flex flex-column justify-content-center mx-auto">
+      <button
+        [disabled]="!sendOtpForm.valid"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="sendForgetPasswordEmail()"
+      >
+        Send OTP Mail
+      </button>
+      <p class="account">
+        Don't have account?
+        <a routerLink="/signup">Signup</a>
+      </p>
+      <p class="account">
+        Try to signin again?
+        <a (click)="reload()" style="color: blue">Sign In</a>
+      </p>
+    </div>
+  </form>
+  <!-- otp and new password modal -->
+  <ng-template #otpModal>
+    <app-modal [modalRef]="modalRef" [title]="'Verify OTP'">
+      <app-verify-otp
+        [email]="sendOtpForm.value.email!"
+        [forgetPasswordMode]="forgetPasswordMode"
+      ></app-verify-otp>
+    </app-modal>
+  </ng-template>
+  <!-- update password done modal -->
+  <ng-template #doneModal>
+    <app-modal [modalRef]="modalRef" [title]="'Done'">
+      <app-update-done-svg [width]="100" [height]="70"></app-update-done-svg>
+      <p class="done-text">Information Updated</p>
+    </app-modal>
+  </ng-template>
+</div>

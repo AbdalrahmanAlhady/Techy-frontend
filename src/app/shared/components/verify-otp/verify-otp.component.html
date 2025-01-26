@@ -1,0 +1,96 @@
+<div class="d-flex flex-column" *ngIf="!verified">
+  <app-opt-email-svg [width]="100" [height]="200"></app-opt-email-svg>
+  <p>An Email was sent to {{ email }} with your OTP</p>
+  <div class="d-flex flex-column">
+    <h2 *ngIf="forgetPasswordMode">Update Password</h2>
+    <h2 *ngIf="!forgetPasswordMode">Verify Your Email</h2>
+    <form
+      #form1="ngForm"
+      class="d-flex flex-column"
+      *ngIf="forgetPasswordForm"
+      [formGroup]="forgetPasswordForm"
+    >
+      <mat-form-field appearance="fill" *ngIf="forgetPasswordMode">
+        <mat-label>New Password</mat-label>
+        <input
+          formControlName="newPassword"
+          id="newPassword"
+          matInput
+          placeholder="Enter Password"
+          type="password"
+        />
+        <mat-icon matSuffix>password</mat-icon>
+        <mat-error
+          *ngIf="
+            forgetPasswordForm.controls['newPassword'].touched &&
+            forgetPasswordForm.controls['newPassword'].errors
+          "
+        >
+          {{
+            customValidator.getErrorMessage("newPassword", forgetPasswordForm)
+          }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="forgetPasswordMode">
+        <mat-label>Re-enter Password</mat-label>
+        <input
+          formControlName="cNewPassword"
+          id="cNewPassword"
+          matInput
+          placeholder="Re-enter Password"
+          type="password"
+        />
+        <mat-icon matSuffix>password</mat-icon>
+        <mat-error
+          *ngIf="
+            forgetPasswordForm.controls['cNewPassword'].touched &&
+            forgetPasswordForm.controls['cNewPassword'].errors
+          "
+        >
+          {{
+            customValidator.getErrorMessage("cNewPassword", forgetPasswordForm)
+          }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>OTP</mat-label>
+        <input
+          [ngModelOptions]="{ standalone: true }"
+          id="otp"
+          matInput
+          placeholder="Enter OTP"
+          type="text"
+          [(ngModel)]="otp"
+        />
+        <mat-icon matSuffix>message</mat-icon>
+      </mat-form-field>
+      <div class="backendError" *ngIf="backendError">
+        {{ backendError }}
+      </div>
+      <button
+        [disabled]="!forgetPasswordForm.valid"
+        color="primary"
+        mat-raised-button
+        type="submit"
+        (click)="forgetPassword()"
+        *ngIf="forgetPasswordMode"
+      >
+        Change Password
+      </button>
+    </form>
+  </div>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="verifyOtp()"
+    [disabled]="otp.length < 1"
+    *ngIf="!forgetPasswordMode"
+  >
+    Verify Email
+  </button>
+</div>
+<div class="d-flex flex-column" *ngIf="verified">
+  <app-email-verified-svg [width]="100" [height]="200"></app-email-verified-svg>
+  <p>Your Email has been verified</p>
+</div>
+

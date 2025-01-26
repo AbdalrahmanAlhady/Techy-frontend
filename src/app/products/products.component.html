@@ -1,18 +1,79 @@
 <!-- Header-->
 <header class="bg-gray py-5">
-  <div class="container px-4 px-lg-5 my-5 carsousel-container shadow p-3 mb-5 bg-white rounded">
-   <app-carousel *ngIf="products.length>0" [products]="products"></app-carousel>
+  <div
+    class="container px-4 px-lg-5 my-5 carsousel-container shadow p-3 mb-5 bg-white rounded"
+  >
+    <app-carousel
+      *ngIf="products.length > 0"
+      [products]="products"
+    ></app-carousel>
   </div>
 </header>
 <!-- Section-->
-<section class="py-5">
-  <div class="container px-4 px-lg-5 mt-5 ">
+<section class="py-5 d-flex flex-row">
+  <div>
+    <app-filters></app-filters>
+  </div>
+  <div class="container px-4 px-lg-5">
+    <div class="d-flex flex-row justify-content-between">
+      <!-- seach container -->
+      <mat-form-field>
+        <input
+          matInput
+          type="search"
+          placeholder="Search for a product"
+          [formControl]="control"
+          [matAutocomplete]="auto"
+        />
+        <button matSuffix mat-icon-button aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredAllProductsMiniData | async"
+            [value]="option.id"
+            (click)="viewProduct(option.id)"
+            ><img class="product-search-img" [src]="option.cover" />{{ option.name }}</mat-option
+          >
+        </mat-autocomplete>
+      </mat-form-field>
+      <!-- sort container -->
+      <div class="sort-container d-flex flex-row align-items-center mb-3">
+        <label for="sort" class="me-2 fw-bold fs-6 mb-0">Sort By:</label>
+        <select
+          class="form-select w-auto me-2"
+          id="sort"
+          [(ngModel)]="sortType"
+          (change)="sort(sortType, sortDirection)"
+        >
+          <option hidden>Default</option>
+          <option [value]="'Price'">Price</option>
+          <option [value]="'Name'">Name</option>
+        </select>
+        <app-sort-arrow-up
+          class="pointer me-2"
+          [width]="24"
+          [height]="24"
+          [fill]="sortType && sortDirection === 'ASC' ? 'blue' : 'black'"
+          (click)="sortDirection = 'ASC'; sort(sortType, sortDirection)"
+        ></app-sort-arrow-up>
+        <app-sort-arrow-down
+          class="pointer"
+          [width]="24"
+          [height]="24"
+          [fill]="sortType && sortDirection === 'DESC' ? 'blue' : 'black'"
+          (click)="sortDirection = 'DESC'; sort(sortType, sortDirection)"
+        ></app-sort-arrow-down>
+      </div>
+    </div>
     <div
-      class=" row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center"
+      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center"
     >
-      <app-product-card [product]="Product" *ngFor="let Product of products"></app-product-card>
+      <app-product-card
+        [product]="Product"
+        *ngFor="let Product of products"
+      ></app-product-card>
     </div>
     <app-pagination></app-pagination>
   </div>
 </section>
-

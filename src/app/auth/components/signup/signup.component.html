@@ -1,0 +1,125 @@
+<div *ngIf="signedup" class="d-flex flex-column spinner-container">
+  <mat-spinner></mat-spinner>
+  <P class="redirecting">redirecting you to Signin page ...</P>
+</div>
+<div *ngIf="!signedup" class="d-flex flex-row container">
+  <form
+    #form1="ngForm"
+    class="d-flex flex-column shadow"
+    *ngIf="signupForm"
+    [formGroup]="signupForm"
+  >
+    <h2>Create an account</h2>
+    <div class="d-flex flex-column">
+      <mat-form-field>
+        <mat-label>Signup as</mat-label>
+        <mat-select formControlName="role">
+          <mat-option [value]="userRoles.BUYER">Buyer</mat-option>
+          <mat-option [value]="userRoles.VENDOR">Vendor</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- email -->
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input
+          formControlName="email"
+          id="email"
+          matInput
+          placeholder="example@gmail.com"
+          type="email"
+        />
+        <mat-icon matSuffix> email</mat-icon>
+        <mat-error
+          *ngIf="
+            signupForm.controls['email'].touched &&
+            signupForm.controls['email'].errors
+          "
+        >
+          {{ customValidator.getErrorMessage("email", signupForm) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- password -->
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          formControlName="password"
+          id="password"
+          matInput
+          placeholder="Enter Password"
+          type="password"
+        />
+        <mat-icon matSuffix> password</mat-icon>
+        <mat-error *ngIf="signupForm.controls['password'].touched && signupForm.controls['password'].errors">
+          {{ customValidator.getErrorMessage("password", signupForm) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- cPassword -->
+      <mat-form-field appearance="outline">
+        <mat-label>Re-enter Password</mat-label>
+        <input
+          formControlName="cPassword"
+          id="cPassword"
+          matInput
+          placeholder="Re-enter Password"
+          type="password"
+        />
+        <mat-icon matSuffix> password</mat-icon>
+        <mat-error *ngIf="signupForm.controls['cPassword'].touched && signupForm.controls['cPassword'].errors">
+          {{ customValidator.getErrorMessage("cPassword", signupForm) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- first name -->
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <mat-label>First Name</mat-label>
+        <input
+          formControlName="firstName"
+          id="fn"
+          matInput
+          placeholder="Enter First Name"
+        />
+        <mat-icon matSuffix>person</mat-icon>
+        <mat-error *ngIf="signupForm.controls['firstName'].touched && signupForm.controls['firstName'].errors">
+          {{ customValidator.getErrorMessage("firstName", signupForm) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- last name -->
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <mat-label>Last Name</mat-label>
+        <input
+          formControlName="lastName"
+          id="ln"
+          matInput
+          placeholder="Enter Last Name"
+          type="text"
+        />
+        <mat-icon matSuffix>person</mat-icon>
+        <mat-error
+          *ngIf="
+            signupForm.controls['lastName'].touched &&
+            signupForm.controls['lastName'].errors
+          "
+        >
+          {{ customValidator.getErrorMessage("lastName", signupForm) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="backendError" class="backend-err">
+      {{ backendError }}
+    </mat-error>
+    <div class="submit-btn d-flex flex-column justify-content-center mx-auto">
+      <button
+        [disabled]="!signupForm.valid"
+        (click)="signup(form1.value)"
+        color="primary"
+        mat-raised-button
+        type="submit"
+      >
+        Signup
+      </button>
+      <p class="account">
+        Already have account?
+        <a routerLink="/signin">Signin</a>
+      </p>
+    </div>
+  </form>
+</div>

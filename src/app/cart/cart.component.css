@@ -4,7 +4,7 @@
 
 .card {
     margin: auto;
-    width: 70%;
+    width: 80%;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
     border: transparent;
@@ -32,9 +32,7 @@
     padding: 0;
 }
 
-.summary .col-10 {
-    padding: 0;
-}
+
 
 .row {
     margin: 0;
@@ -60,10 +58,6 @@ a {
     text-decoration: none;
 }
 
-.close {
-    margin-left: auto;
-    font-size: 0.7rem;
-}
 
 img {
     width: 3.5rem;
@@ -95,18 +89,7 @@ select {
     background-color: rgb(247, 247, 247);
 }
 
-input {
-    border: 1px solid rgba(0, 0, 0, 0.137);
-    padding: 1vh;
-    margin-bottom: 4vh;
-    outline: none;
-    width: 100%;
-    background-color: rgb(247, 247, 247);
-}
 
-input:focus::-webkit-input-placeholder {
-    color: transparent;
-}
 
 .btn {
     background-color: #000;
@@ -157,25 +140,15 @@ mat-icon {
     width: 60%;
 }
 
-input[type="number"].quantity {
-    -moz-appearance: textfield;
-    /* For Firefox */
-    appearance: textfield;
-    /* Standard property for other browsers */
-}
-
-input[type="number"].quantity::-webkit-inner-spin-button,
-input[type="number"].quantity::-webkit-outer-spin-button {
-    opacity: 1;
-    /* Always visible */
-    display: inline-block;
-    /* Ensure they render properly */
-}
-
 .checkout-btn {
     margin-top: 5vh;
 }
 
 .summary-bottom {
     padding: 2vh 0 0 0 !important;
+}
+.err{
+    color: red;
+    font-size: 16px;
+    justify-self: center
 }

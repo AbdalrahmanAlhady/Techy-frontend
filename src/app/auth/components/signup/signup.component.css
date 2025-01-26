@@ -1,0 +1,83 @@
+.container {
+    background-color: white;
+    padding: 0;
+    width: 70%;
+    margin: auto;
+}
+
+.spinner-container {
+    height: 400px;
+    align-items: center;
+    opacity: 0.75;
+    margin-top: 150px;
+    width: 500px;
+    justify-content: center;
+    background-color: white;
+    padding: 0;
+    margin: auto;
+    margin-top: 20%;
+    padding: 20px;
+}
+
+img {
+    width: 60%;
+}
+
+.account {
+    color: black;
+    font-weight: bold;
+    margin-top: 10px;
+    width: max-content;
+    align-self: center;
+}
+
+mat-form-field {
+    margin: 5px;
+}
+
+
+form {
+    margin: 50px auto;
+    width: 50%;
+    padding: 20px;
+
+}
+
+.submit-btn {
+    width: 40%;
+
+}
+
+mat-form-field {
+    margin: 0;
+}
+
+.account {
+    color: black;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+mat-spinner {
+    height: 250px;
+    width: 250px;
+    margin-bottom: 10px;
+}
+
+.redirecting {
+    width: fit-content;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer
+}
+.backend-err{
+    color: red;
+    font-size: 16px;
+    justify-self: center
+}

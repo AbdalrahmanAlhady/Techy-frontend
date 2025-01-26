@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-center flex-column ms-5 wrapper">
+  <h2 class="shadow p-3 bg-white rounded">Filters</h2>
+  <mat-list class="shadow p-3 mb-5 bg-white rounded">
+    <mat-selection-list [(ngModel)]="selectedBrands">
+      <h3 matSubheader class="fw-bold">Brands</h3>
+      <mat-list-option *ngFor="let brand of brands" [value]="brand">{{
+        brand.name
+      }}</mat-list-option>
+    </mat-selection-list>
+    <mat-divider></mat-divider>
+    <mat-selection-list [(ngModel)]="selectedCategories">
+      <h3 matSubheader class="fw-bold">Categories</h3>
+      <mat-list-option *ngFor="let Category of categories" [value]="Category">{{
+        Category.name
+      }}</mat-list-option>
+    </mat-selection-list>
+    <mat-divider></mat-divider>
+    <mat-selection-list *ngIf="priceRange">
+      <h3 matSubheader class="fw-bold">Price</h3>
+      <mat-slider
+        [min]="priceRange.min"
+        [max]="priceRange.max"
+        discrete
+      >
+        <input matSliderStartThumb value="priceRange.min" [(ngModel)]="selectedMinPrice" />
+        <input matSliderEndThumb [(ngModel)]="selectedMaxPrice" />
+      </mat-slider>
+    </mat-selection-list>
+    <mat-divider></mat-divider>
+    <button
+      mat-raised-button
+      color="primary"
+      class="mt-10 w-100"
+      (click)="filter()"
+    >
+      Filter
+    </button>
+  </mat-list>
+</div>

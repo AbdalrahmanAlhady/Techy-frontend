@@ -8,5 +8,6 @@ import { Component, OnInit, Input } from '@angular/core';
 export class IconsBaseComponent {
   @Input() width = 16;
   @Input() height = 16;
+  @Input() fill = '#000000';
   constructor() {}
 }

@@ -60,6 +60,8 @@ export class CartService {
     const existingCart: OrderItem[] = this.localStorageService.getItem('cart');
     if (existingCart) {
       existingCart[cartIndex].quantity = newQuantity;
+      existingCart[cartIndex].totalPrice =
+        existingCart[cartIndex].unitPrice * newQuantity;
       this.localStorageService.setItem('cart', existingCart);
     }
     return existingCart;

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService } from '../shared/services/cart.service';
+
 import { LocalStorageService } from '../shared/services/local-storage.service';
 import { Router } from '@angular/router';
 import { OrderService } from '../shared/services/order.service';
 import { Order } from '../shared/models/Order';
 import { OrderItem } from '../shared/models/OrderItem';
+import { CartService } from '../shared/services/cart.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { CustomvalidationService } from '../auth/services/customvalidation.service';
 
 @Component({
   selector: 'app-cart',
@@ -19,11 +22,65 @@ export class CartComponent implements OnInit {
     { label: 'Standard-Delivery- $5.00', value: 5.0 },
     { label: 'Express-Delivery- $10.00', value: 10.0 },
   ];
+  error: string = '';
+  address: string = '';
+  addressForm = this.formBuilder.group({
+    floor: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(10),
+      ]),
+    ],
+    buildingNumber: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(10),
+      ]),
+    ],
+    street: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(10),
+      ]),
+    ],
+    neighborhood: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(10),
+      ]),
+    ],
+    city: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(10),
+      ]),
+    ],
+    country: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(10),
+      ]),
+    ],
+  });
   constructor(
     private cartService: CartService,
     private localStorageService: LocalStorageService,
     private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private formBuilder: FormBuilder,
+    public customValidator: CustomvalidationService
   ) {}
   ngOnInit(): void {
     this.orderItems = this.localStorageService.getItem('cart');
@@ -52,19 +109,31 @@ export class CartComponent implements OnInit {
   clearCart() {
     this.cartService.emptyCart();
     this.orderItems = [];
+    this.addressForm.reset();
     this.router.navigate(['/']);
   }
   totalQuantity(): number {
     return this.orderItems.reduce((total, item) => total + item.quantity, 0);
   }
   createOrder() {
+    if (this.addressForm.invalid) {
+      this.error = 'Please fill all the fields';
+      return;
+    }
+    this.address = `floor:${this.addressForm.value.floor},building:${this.addressForm.value.buildingNumber}, ${this.addressForm.value.street} st, ${this.addressForm.value.neighborhood}, ${this.addressForm.value.city}, ${this.addressForm.value.country}`;
     this.orderService
       .createOrder(
         this.orderItems.map(({ product, ...rest }) => rest),
         '2',
         this.totalAmount,
-        this.deliveryFee
+        this.deliveryFee,
+        this.address
       )
-      .subscribe((res) => {});
+      .subscribe((res) => {
+        if (res.data?.createOrder) {
+          this.clearCart();
+          this.router.navigate(['/']);
+        }
+      });
   }
 }

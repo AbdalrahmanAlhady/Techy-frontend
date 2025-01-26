@@ -1,6 +1,12 @@
 import { Component, effect, OnInit, untracked } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { map, Observable, startWith } from 'rxjs';
 import { Product } from '../shared/models/Product';
+import { AuthService } from '../shared/services/auth.service';
+import { LocalStorageService } from '../shared/services/local-storage.service';
 import { ProductService } from '../shared/services/product.service';
 
 @Component({
@@ -9,15 +15,32 @@ import { ProductService } from '../shared/services/product.service';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
+  control = new FormControl('');
   products: Product[] = [];
-  constructor(private productService: ProductService) {
+  sortType: 'Price' | 'Name' | 'Default' = 'Default';
+  sortDirection: 'ASC' | 'DESC' = 'ASC';
+  allProductsMiniData: { id: string; name: string; cover: string }[] = [];
+  filteredAllProductsMiniData!: Observable<
+    { id: string; name: string; cover: string }[]
+  >;
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private localStorageService: LocalStorageService,
+    private cookieService: CookieService,
+    private authService: AuthService
+  ) {
     effect(() => {
       this.products = this.productService.productsSignal();
     });
   }
   ngOnInit(): void {
+    this.getProducts();
+    this.getProductMiniData();
+  }
+  getProducts() {
     this.productService
-      .getProducts({ limit: this.productService.productsPerPage, page: 1 })
+      .getProducts(this.productService.queryOptions)
       .subscribe({
         next: (result) => {
           this.products = result.data.products || [];
@@ -25,5 +48,48 @@ export class ProductsComponent implements OnInit {
         },
         error: (error) => console.error('Error fetching products:', error),
       });
+  }
+  sort(sortType: 'Price' | 'Name' | 'Default', direction: 'ASC' | 'DESC') {
+    this.products = [...this.products].sort((a, b) => {
+      if (sortType === 'Price') {
+        return direction === 'ASC' ? a.price - b.price : b.price - a.price;
+      }
+      if (sortType === 'Name') {
+        return direction === 'ASC'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      }
+      return 0;
+    });
+  }
+  getProductMiniData() {
+    this.productService.getProductsNames().subscribe({
+      next: (result) => {
+        this.allProductsMiniData = result.data.productsNames;
+
+        this.filteredAllProductsMiniData = this.control.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            this.allProductsMiniData.filter((prod) =>
+              prod.name.toLowerCase().includes(value!)
+            )
+          )
+        );
+      },
+      error: (error) => console.error('Error fetching products:', error),
+    });
+  }
+  viewProduct(productId: string) {
+    console.log('view product:', productId);
+    this.productService.getProducts(undefined, productId).subscribe({
+      next: (result) => {
+        let product = result.data.products[0];
+        console.log('product:', result.data.products);
+        this.localStorageService.removeItem('viewProduct');
+        this.localStorageService.setItem('viewProduct', product);
+        this.router.navigate(['product', productId]);
+      },
+      error: (error) => console.error('Error fetching products:', error),
+    });
   }
 }

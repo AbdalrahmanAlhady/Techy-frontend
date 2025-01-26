@@ -7,6 +7,7 @@ export interface Product {
   name: string;
   cover: string;
   description: string;
+  inventory: number;
   price: number;
   brand: Brand;
   category: Category;

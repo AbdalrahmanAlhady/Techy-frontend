@@ -8,25 +8,52 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {MatSnackBarModule} from '@angular/material/snack-bar'
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './products/products.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
-import { ProductDetailsComponent } from './products/product-details/product-details.component';
+
 import { CartComponent } from './cart/cart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IconsBaseComponent } from './shared/icons/icons-base/icons-base.component';
 import { LogoComponent } from './shared/icons/logo/logo.component';
-import { ProductCardComponent } from './products/product-card/product-card.component';
+
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CloudinaryModule } from '@cloudinary/ng';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthComponent } from './auth/auth.component';
+import { SigninComponent } from './auth/components/signin/signin.component';
+import { SignupComponent } from './auth/components/signup/signup.component';
+import { UpdateDoneSvgComponent } from './shared/icons/update-done-svg/update-done-svg.component';
+import { ModalComponent } from './shared/components/modal/modal.component';
+import { VerifyOtpComponent } from './shared/components/verify-otp/verify-otp.component';
+import { OptEmailSvgComponent } from './shared/icons/opt-email-svg/opt-email-svg.component';
+import { EmailVerifiedSvgComponent } from './shared/icons/email-verified-svg/email-verified-svg.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+import { ProductDetailsComponent } from './products/components/product-details/product-details.component';
+import { ProductCardComponent } from './products/components/product-card/product-card.component';
+import { FiltersComponent } from './shared/components/fliters/fliters.component';
+import { SortArrowUpComponent } from './shared/icons/sort-arrow-up/sort-arrow-up.component';
+import { SortArrowDownComponent } from './shared/icons/sort-arrow-down/sort-arrow-down.component';
+import { AuthInterceptor } from './auth/services/auth_interceptor.service';
 
 @NgModule({
   declarations: [
@@ -42,10 +69,22 @@ import { FormsModule } from '@angular/forms';
     FooterComponent,
     CarouselComponent,
     PaginationComponent,
+    AuthComponent,
+    SignupComponent,
+    SigninComponent,
+    UpdateDoneSvgComponent,
+    ModalComponent,
+    VerifyOtpComponent,
+    OptEmailSvgComponent,
+    EmailVerifiedSvgComponent,
+    FiltersComponent,
+    SortArrowUpComponent,
+    SortArrowDownComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MatButtonModule,
     MatBadgeModule,
@@ -58,10 +97,27 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatSnackBarModule
-
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSidenavModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    ModalModule.forRoot(),
+    MatListModule,
+    MatExpansionModule,
+    MatTreeModule,
+    MatSliderModule,
+    MatAutocompleteModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

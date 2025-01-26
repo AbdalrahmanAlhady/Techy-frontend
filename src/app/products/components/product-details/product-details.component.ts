@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/shared/models/Product';
 import { CartService } from 'src/app/shared/services/cart.service';
+
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 

@@ -5,6 +5,6 @@ export class GQLQueryOptions {
   sortOrder?: 'ASC' | 'DESC';
   searchField?: string;
   searchTerm?: string;
-  filters?: string;
+  filters?: { [key: string]: string[] };
   relations?: string[];
 }
