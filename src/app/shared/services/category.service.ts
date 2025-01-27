@@ -16,9 +16,16 @@ import { ApolloQueryResult } from '@apollo/client/core';
   providedIn: 'root',
 })
 export class CategoryService {
+  categoriesSignal = signal<Category[]>([]);
+  filtersAppliedSignal = signal<boolean>(false);
   categoriesPerPage: number = 6;
   currentCategoriesPageSignal = signal<number>(1);
-  constructor(private apollo: Apollo) {}
+  queryOptions: GQLQueryOptions = new GQLQueryOptions();
+  constructor(private apollo: Apollo) {
+    this.queryOptions.limit = this.categoriesPerPage;
+    this.queryOptions.page = 1;
+    this.queryOptions.filters = {};
+  }
 
   getCategoriesCount(
     options?: GQLQueryOptions
@@ -27,6 +34,9 @@ export class CategoryService {
       query: GET_CATEGORIES_COUNT,
       variables: {
         options: options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }
@@ -39,6 +49,9 @@ export class CategoryService {
       variables: {
         id: id,
         options: options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }

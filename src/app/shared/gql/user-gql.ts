@@ -9,9 +9,9 @@ export const GET_USERS_QUERY = gql`
   query Users($options: QueryOptionsInput, $usersId: String) {
     users(options: $options, id: $usersId) {
       id
-      email
       firstName
       lastName
+      email
       verified
       role
     }

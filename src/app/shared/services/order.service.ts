@@ -18,9 +18,17 @@ import {
   providedIn: 'root',
 })
 export class OrderService {
+  ordersSignal = signal<Order[]>([]);
   ordersPerPage: number = 6;
   currentOrdersPageSignal = signal<number>(1);
-  constructor(private apollo: Apollo) {}
+  filtersAppliedSignal = signal<boolean>(false);
+  queryOptions: GQLQueryOptions = new GQLQueryOptions();
+
+  constructor(private apollo: Apollo) {
+    this.queryOptions.limit = this.ordersPerPage;
+    this.queryOptions.page = 1;
+    this.queryOptions.filters = {};
+  }
 
   getOrdersCount(
     options?: GQLQueryOptions

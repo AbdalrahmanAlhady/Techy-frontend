@@ -58,6 +58,9 @@ export class AuthService {
       variables: {
         ...userData,
       },
+      context: {
+        headers: { skip: 'true' },
+      },
     });
   }
   signin(
@@ -83,6 +86,9 @@ export class AuthService {
       variables: {
         email,
         password,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     });
   }
@@ -114,6 +120,9 @@ export class AuthService {
         currentPassword,
         code: OTP,
       },
+      context: {
+        headers: { skip: 'true' },
+      },
     });
   }
   verifyEmailViaOTP(
@@ -126,6 +135,9 @@ export class AuthService {
         code: OTP,
         email,
       },
+      context: {
+        headers: { skip: 'true' },
+      },
     });
   }
   sendOTP(
@@ -137,6 +149,9 @@ export class AuthService {
       variables: {
         reason,
         email,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     });
   }

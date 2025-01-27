@@ -17,10 +17,19 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   userSignal = signal<User | null>(this.getCurrentUser());
+  usersSignal = signal<User[]>([]);
+  filtersAppliedSignal = signal<boolean>(false);
+  usersPerPage: number = 6;
+  currentUsersPageSignal = signal<number>(1);
+  queryOptions: GQLQueryOptions = new GQLQueryOptions();
   constructor(
     private localStorage: LocalStorageService,
     private apollo: Apollo
-  ) {}
+  ) {
+    this.queryOptions.limit = this.usersPerPage;
+    this.queryOptions.page = 1;
+    this.queryOptions.filters = {};
+  }
 
   getCurrentUser(): User {
     return this.localStorage.getItem('user');

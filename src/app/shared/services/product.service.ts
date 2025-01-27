@@ -3,6 +3,7 @@ import { Apollo, MutationResult } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import {
   CREATE_PRODUCT_MUTATION,
+  DELETE_PRODUCT_MUTATION,
   GET_PRODUCTS_COUNT_QUERY,
   GET_PRODUCTS_NAMES_QUERY,
   GET_PRODUCTS_PRICE_RANGE_QUERY,
@@ -37,9 +38,11 @@ export class ProductService {
       variables: {
         options: options,
       },
+      context: {
+        headers: { skip: 'true' },
+      },
     }).valueChanges;
   }
-
   getProductsNames(options?: GQLQueryOptions): Observable<
     ApolloQueryResult<{
       productsNames: { id: string; name: string; cover: string }[];
@@ -51,6 +54,9 @@ export class ProductService {
       query: GET_PRODUCTS_NAMES_QUERY,
       variables: {
         options: options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }
@@ -66,6 +72,9 @@ export class ProductService {
       variables: {
         options: options,
       },
+      context: {
+        headers: { skip: 'true' },
+      },
     }).valueChanges;
   }
   getProducts(
@@ -77,6 +86,9 @@ export class ProductService {
       variables: {
         id: id,
         options: options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }
@@ -124,7 +136,7 @@ export class ProductService {
     productId: string
   ): Observable<MutationResult<{ deleteProduct: boolean }>> {
     return this.apollo.mutate<{ deleteProduct: boolean }>({
-      mutation: UPDATE_PRODUCT_MUTATION,
+      mutation: DELETE_PRODUCT_MUTATION,
       variables: {
         productId,
       },

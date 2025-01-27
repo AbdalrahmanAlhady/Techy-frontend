@@ -16,10 +16,17 @@ import {
   providedIn: 'root',
 })
 export class BrandService {
+  brandsSignal = signal<Brand[]>([]);
+  filtersAppliedSignal = signal<boolean>(false);
   brandsPerPage: number = 6;
   currentBrandsPageSignal = signal<number>(1);
-  constructor(private apollo: Apollo) {}
+  queryOptions: GQLQueryOptions = new GQLQueryOptions();
 
+  constructor(private apollo: Apollo) {
+    this.queryOptions.limit = this.brandsPerPage;
+    this.queryOptions.page = 1;
+    this.queryOptions.filters = {};
+  }
   getBrandsCount(
     options?: GQLQueryOptions
   ): Observable<ApolloQueryResult<{ brandsCount: number }>> {
@@ -27,6 +34,9 @@ export class BrandService {
       query: GET_BRANDS_COUNT_QUERY,
       variables: {
         options: options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }
@@ -39,6 +49,9 @@ export class BrandService {
       variables: {
         id,
         options,
+      },
+      context: {
+        headers: { skip: 'true' },
       },
     }).valueChanges;
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   CREATE_ORDER_ITEM_MUTATION,
@@ -15,7 +15,17 @@ import { OrderItem } from '../models/OrderItem';
   providedIn: 'root',
 })
 export class OrderItemService {
-  constructor(private apollo: Apollo) {}
+  orderItemsSignal = signal<OrderItem[]>([]);
+  orderItemsPerPage: number = 6;
+  currentOrderItemsPageSignal = signal<number>(1);
+  filtersAppliedSignal = signal<boolean>(false);
+  queryOptions: GQLQueryOptions = new GQLQueryOptions();
+
+  constructor(private apollo: Apollo) {
+    this.queryOptions.limit = this.orderItemsPerPage;
+    this.queryOptions.page = 1;
+    this.queryOptions.filters = {};
+  }
   getOrderItems(
     options?: GQLQueryOptions,
     orderId?: string,
