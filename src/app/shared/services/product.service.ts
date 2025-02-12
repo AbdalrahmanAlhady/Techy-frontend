@@ -13,6 +13,7 @@ import {
 import { Product } from '../models/Product';
 import { GQLQueryOptions } from '../models/GQLQueryOptions';
 import { ApolloQueryResult } from '@apollo/client/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class ProductService {
   currentProductsPageSignal = signal<number>(1);
   queryOptions: GQLQueryOptions = new GQLQueryOptions();
 
-  constructor(private apollo: Apollo) {
+  constructor(private apollo: Apollo, private http: HttpClient) {
     this.queryOptions.limit = this.productsPerPage;
     this.queryOptions.page = 1;
     this.queryOptions.filters = {};
@@ -36,7 +37,7 @@ export class ProductService {
     return this.apollo.watchQuery<{ productsCount: number }>({
       query: GET_PRODUCTS_COUNT_QUERY,
       variables: {
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -53,7 +54,7 @@ export class ProductService {
     }>({
       query: GET_PRODUCTS_NAMES_QUERY,
       variables: {
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -70,7 +71,7 @@ export class ProductService {
     }>({
       query: GET_PRODUCTS_PRICE_RANGE_QUERY,
       variables: {
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -85,7 +86,7 @@ export class ProductService {
       query: GET_PRODUCTS_QUERY,
       variables: {
         id: id,
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -99,7 +100,8 @@ export class ProductService {
     category: string,
     brand: string,
     cover: string,
-    inventory: number
+    inventory: number,
+    vendor: string
   ): Observable<MutationResult<{ createProduct: Product }>> {
     return this.apollo.mutate<{ createProduct: Product }>({
       mutation: CREATE_PRODUCT_MUTATION,
@@ -107,20 +109,22 @@ export class ProductService {
         name,
         description,
         price,
-        category,
-        brand,
+        categoryId: category,
+        brandId: brand,
         cover,
         inventory,
+        vendorId: vendor,
       },
     });
   }
   updateProduct(
     productId: string,
-    name: string,
-    price: number,
-    inventory: number,
-    cover: string
+    name?: string,
+    price?: number,
+    inventory?: number,
+    cover?: string
   ): Observable<MutationResult<{ updateProduct: Product }>> {
+    console.log(typeof inventory);
     return this.apollo.mutate<{ updateProduct: Product }>({
       mutation: UPDATE_PRODUCT_MUTATION,
       variables: {

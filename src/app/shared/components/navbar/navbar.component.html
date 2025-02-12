@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-  <div class="container px-4 px-lg-5">
+  <div class="container px-4 px-lg-5" *ngIf="user || user === null">
     <app-logo [width]="60" [height]="60" [routerLink]="['/']"></app-logo>
     <button
       class="navbar-toggler"
@@ -17,7 +17,7 @@
       <button
         mat-button
         class="text-dark"
-        (click)="user ? toCart() : router.navigate(['/signin'])"
+        (click)="toCart()"
       >
         <mat-icon
           [matBadge]="cartLength"
@@ -48,9 +48,9 @@
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item>Profile</button>
-        <button mat-menu-item>My orders</button>
-        <button mat-menu-item>Dashboard</button>
-        <button mat-menu-item>Logout</button>
+        <button mat-menu-item [routerLink]="['/myorders']">My orders</button>
+        <button mat-menu-item [routerLink]="['/dashboard']">Dashboard</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
       <!-- logout button -->
       <button mat-button class="text-dark" *ngIf="user" (click)="logout()">
@@ -70,7 +70,7 @@
 <ng-template #otpModal>
   <app-modal [modalRef]="modalRef" [title]="'Verify OTP'">
     <app-verify-otp
-      [email]="user.email"
+      [email]="user!.email"
       [forgetPasswordMode]="false"
     ></app-verify-otp>
   </app-modal>

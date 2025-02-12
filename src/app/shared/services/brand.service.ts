@@ -33,7 +33,7 @@ export class BrandService {
     return this.apollo.watchQuery<{ brandsCount: number }>({
       query: GET_BRANDS_COUNT_QUERY,
       variables: {
-        options: options,
+        options
       },
       context: {
         headers: { skip: 'true' },
@@ -72,7 +72,7 @@ export class BrandService {
     return this.apollo.mutate<{ updateBrand: Brand }>({
       mutation: UPDATE_BRAND_MUTATION,
       variables: {
-        id,
+        brandId:id,
         name,
       },
     });

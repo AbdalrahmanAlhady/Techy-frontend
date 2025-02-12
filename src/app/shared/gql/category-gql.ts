@@ -28,8 +28,12 @@ export const CREATE_CATEGORY_MUTATION = gql`
 export const UPDATE_CATEGORY_MUTATION = gql`
   mutation UpdateCategory($name: String!, $categoryId: String!) {
     updateCategory(name: $name, id: $categoryId) {
-      id
+     id
       name
+      products {
+        id
+        name
+      }
     }
   }
 `;

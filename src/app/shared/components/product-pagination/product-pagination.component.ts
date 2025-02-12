@@ -2,11 +2,12 @@ import { Component, effect, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 
 @Component({
-  selector: 'app-pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css'],
+  standalone:false,
+  selector: 'app-product-pagination',
+  templateUrl: './product-pagination.component.html',
+  styleUrls: ['./product-pagination.component.css'],
 })
-export class PaginationComponent implements OnInit {
+export class ProductPaginationComponent implements OnInit {
   pagesNumber: number = 0;
   pages: number[] = [];
   constructor(private productService: ProductService) {

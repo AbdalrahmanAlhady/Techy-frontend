@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/shared/models/Product';
-import { CartService } from 'src/app/shared/services/cart.service';
-
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { Product } from '../../../shared/models/Product';
+import { ProductService } from '../../../shared/services/product.service';
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
+import { CartService } from '../../../shared/services/cart.service';
 
 @Component({
+  standalone: false,
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css'],

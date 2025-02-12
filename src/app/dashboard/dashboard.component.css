@@ -12,6 +12,7 @@
 .side-nav {
     width: 20%;
     text-shadow: 0 0 black;
+    min-height: 75vh;
 }
 
 .main {
@@ -29,3 +30,10 @@ a{
     cursor: pointer;
 }
 
+.operation{
+    margin: 25px auto 25px;
+}
+.product-search-img{
+    width: 25px;
+    height: 25px;
+}

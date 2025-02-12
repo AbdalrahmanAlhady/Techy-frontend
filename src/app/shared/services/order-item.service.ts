@@ -3,7 +3,11 @@ import { Observable } from 'rxjs';
 import {
   CREATE_ORDER_ITEM_MUTATION,
   DELETE_ORDER_ITEM_MUTATION,
-  ORDER_ITEMS_QUERY,
+
+  GET_ORDER_ITEMS_COUNT_QUERY,
+
+  GET_ORDER_ITEMS_QUERY,
+
   UPDATE_ORDER_ITEM_MUTATION,
 } from '../gql/order_item_gql';
 import { GQLQueryOptions } from '../models/GQLQueryOptions';
@@ -26,6 +30,21 @@ export class OrderItemService {
     this.queryOptions.page = 1;
     this.queryOptions.filters = {};
   }
+  getOrderItemsCount(
+    options?: GQLQueryOptions,
+    orderId?: string,
+    vendorId?: string
+  ): Observable<ApolloQueryResult<{ orderItemsCount: number }>> {
+    return this.apollo.watchQuery<{ orderItemsCount: number }>({
+      query: GET_ORDER_ITEMS_COUNT_QUERY,
+      variables: {
+        orderId,
+        vendorId,
+        options
+      },
+    }).valueChanges;
+  }
+  
   getOrderItems(
     options?: GQLQueryOptions,
     orderId?: string,
@@ -33,12 +52,12 @@ export class OrderItemService {
     vendorId?: string
   ): Observable<ApolloQueryResult<{ orderItems: OrderItem[] }>> {
     return this.apollo.watchQuery<{ orderItems: OrderItem[] }>({
-      query: ORDER_ITEMS_QUERY,
+      query: GET_ORDER_ITEMS_QUERY,
       variables: {
-        orderId: orderId,
-        vendorId: vendorId,
-        orderItemId: orderItemId,
-        options: options,
+        orderId,
+        vendorId,
+        orderItemId,
+        options
       },
     }).valueChanges;
   }
@@ -48,8 +67,8 @@ export class OrderItemService {
     totalPrice: number,
     orderId: string,
     productId: string
-  ): Observable<MutationResult<{ CreateOrderItem: OrderItem }>> {
-    return this.apollo.mutate<{ CreateOrderItem: OrderItem }>({
+  ): Observable<MutationResult<{ createOrderItem: OrderItem }>> {
+    return this.apollo.mutate<{ createOrderItem: OrderItem }>({
       mutation: CREATE_ORDER_ITEM_MUTATION,
       variables: {
         quantity,

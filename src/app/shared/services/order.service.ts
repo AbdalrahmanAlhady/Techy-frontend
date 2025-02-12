@@ -36,7 +36,7 @@ export class OrderService {
     return this.apollo.watchQuery<{ ordersCount: number }>({
       query: GET_ORDERS_COUNT_QUERY,
       variables: {
-        options: options,
+        options
       },
     }).valueChanges;
   }
@@ -49,7 +49,7 @@ export class OrderService {
       query: GET_ORDERS_QUERY,
       variables: {
         id: id,
-        options: options,
+        options
       },
     }).valueChanges;
   }
@@ -75,7 +75,8 @@ export class OrderService {
     orderId: string,
     deliveryFee: number,
     totalAmount: number,
-    orderStatus: string
+    orderStatus: string,
+    address: string
   ): Observable<MutationResult<{ updateOrder: Order }>> {
     return this.apollo.mutate<{ updateOrder: Order }>({
       mutation: UPDATE_ORDER_MUTATION,
@@ -84,6 +85,7 @@ export class OrderService {
         deliveryFee,
         totalAmount,
         orderStatus,
+        address
       },
     });
   }

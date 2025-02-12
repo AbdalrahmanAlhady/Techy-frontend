@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   effect,
   inject,
@@ -18,6 +19,7 @@ import { ShareDataService } from '../../services/share-data.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
+  standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
@@ -28,7 +30,7 @@ export class NavbarComponent implements OnInit {
   subscriptions = new Subscription();
   private _snackBar = inject(MatSnackBar);
   cartLength: number = 0;
-  user!: User;
+  user: User | null = null;
   modalRef?: BsModalRef;
   backendError: string = '';
   constructor(
@@ -41,22 +43,43 @@ export class NavbarComponent implements OnInit {
     private userService: UserService
   ) {
     effect(() => {
-      this.cartLength = this.cartService.updateCartLengthSignal();
-      this.user = this.userService.userSignal()!;
+      if (this.userService.userSignal()) {
+        this.user = this.userService.userSignal();
+      } else if (
+        !this.userService.getCurrentUser() &&
+        !this.userService.userSignal()
+      ) {
+        this.user = null;
+      }
+      if (this.cartService.updateCartLengthSignal() > 0)
+        this.cartLength = this.cartService.updateCartLengthSignal();
     });
   }
   ngOnInit(): void {
-    this.cartLength = this.localStorageService.getItem('cartLength');
-    this.user = this.localStorageService.getItem('user');
+    this.cartLength = this.localStorageService.getItem('cartLength') || 0;
+    this.user = this.userService.getCurrentUser();
   }
   toCart() {
-    if (this.localStorageService.getItem('cart').length == 0) {
+    if (!this.user) {
+      this._snackBar.open('Please login first', 'Login', {
+        duration: 2000,
+        panelClass: ['snackbar'],
+        verticalPosition: 'top',
+      });
+      this._snackBar._openedSnackBarRef?.onAction().subscribe(() => {
+        this.router.navigate(['/signin']);
+      });
+    } else if (
+      !this.localStorageService.getItem('cart') ||
+      this.localStorageService.getItem('cart').length == 0
+    ) {
       this._snackBar.open(
         'cart is empty, please add some products',
         'continue shopping',
         {
           duration: 2000,
-          panelClass: ['red-snackbar'],
+          panelClass: ['snackbar'],
+          verticalPosition: 'top',
         }
       );
     } else {
@@ -65,7 +88,7 @@ export class NavbarComponent implements OnInit {
   }
   verifyEmail() {
     this.subscriptions.add(
-      this.authService.sendOTP(this.user.email, 'verify_email').subscribe({
+      this.authService.sendOTP(this.user!.email, 'verify_email').subscribe({
         next: (res) => {
           if (res.data?.sendMail) {
             this.modalRef = this.modalService.show(this.otpModal);

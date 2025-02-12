@@ -1,71 +1,102 @@
 import { Injectable } from '@angular/core';
 import {
+  HttpEvent,
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, switchMap, filter, take, finalize } from 'rxjs/operators';
 import { AuthService } from '../../shared/services/auth.service';
-import { catchError, switchMap, throwError } from 'rxjs';
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { UserService } from 'src/app/shared/services/user.service';
-import { User } from 'src/app/shared/models/User';
+import { UserService } from '../../shared/services/user.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private isRefreshingToken: boolean = false;
+  private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
+    string | null
+  >(null);
+
   constructor(
     private authService: AuthService,
-    private localStorageService: LocalStorageService,
     private userService: UserService
   ) {}
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    // If the request header contains 'skip', bypass the interceptor
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if (req.url.includes('cloudinary')) {
+      return next.handle(req);
+    }
     if (req.headers.get('skip')) {
       return next.handle(req);
     }
-    const user: User = this.userService.getCurrentUser();
-    const userAccessToken = this.authService.getAccessToken();
-    // If user access token is present
-    if (userAccessToken) {
-      const refreshTokenExpiry = this.authService.refreshTokenExpiry();
-      const accessTokenExpiry = this.authService.accessTokenExpiry();
-      // If the refresh token is about to expire, sign out the user
-      if (refreshTokenExpiry <= 10) {
-        this.authService.signout();
-      }
-      // If the access token is about to expire, refresh it  
-      if (accessTokenExpiry <= 10) {
-        return this.authService.refreshAccessToken().pipe(
-          switchMap((res) => {
-          console.log(res);
-          const newAccessToken = res.data?.refreshAccessToken!;
-          this.authService.setAccessToken(newAccessToken);
-          // Clone the original request with the new access token
-          const modifiedReq = req.clone({
-            headers: req.headers.set('Authorization', 'Bearer ' + newAccessToken),
-          });
 
-          return next.handle(modifiedReq);
-        }),
-        catchError((error) => {
-          console.error('Error refreshing access token:', error);
-          return throwError(error);
-        })
-      );
-      }
-      // If the access token is still valid, proceed with the original request
-      else {
-        const modifiedReq = req.clone({
-          headers: req.headers.set(
-            'Authorization',
-            'Bearer ' + userAccessToken
-          ),
-        });
-        return next.handle(modifiedReq);
-      }
+    const accessTokenExpiry = this.authService.accessTokenExpiry();
+    const refreshTokenExpiry = this.authService.refreshTokenExpiry();
+    console.log('accessTokenExpiry', accessTokenExpiry);
+    console.log('refreshTokenExpiry', refreshTokenExpiry);
+    if (refreshTokenExpiry <= 10) {
+      console.log('Refresh token expired, signing out');
+      this.authService.signout();
+      return throwError(() => new Error('Session expired'));
     }
 
-    // If no user access token is present, proceed with the original request
-    return next.handle(req);
+    if (accessTokenExpiry <= 10 && !this.isRefreshingToken) {
+      return this.handleAccessTokenRefresh(req, next);
+    }
+
+    const accessToken = this.authService.getAccessToken();
+    return next.handle(this.addTokenToRequest(req, accessToken)).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          return this.handleAccessTokenRefresh(req, next);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private handleAccessTokenRefresh(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if (this.isRefreshingToken) {
+      return this.tokenSubject.pipe(
+        filter((token) => token !== null),
+        take(1),
+        switchMap((token) => next.handle(this.addTokenToRequest(req, token!)))
+      );
+    }
+
+    this.isRefreshingToken = true;
+    this.tokenSubject.next(null);
+
+    return this.authService.refreshAccessToken().pipe(
+      switchMap((res) => {
+        const newAccessToken = res.data?.refreshAccessToken!;
+        this.authService.setAccessToken(newAccessToken);
+        this.tokenSubject.next(newAccessToken);
+        return next.handle(this.addTokenToRequest(req, newAccessToken));
+      }),
+      catchError((error) => {
+        console.error('Error refreshing access token:', error);
+        this.authService.signout();
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this.isRefreshingToken = false;
+      })
+    );
+  }
+
+  private addTokenToRequest(
+    req: HttpRequest<any>,
+    token: string
+  ): HttpRequest<any> {
+    return req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`),
+    });
   }
 }

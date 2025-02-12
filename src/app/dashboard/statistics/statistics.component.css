@@ -1,0 +1,9 @@
+p-card{
+    margin-right: 5px;
+}
+p{
+    font-size: 2em;
+    display: block;
+    width: fit-content;
+    margin: 10px auto;
+}

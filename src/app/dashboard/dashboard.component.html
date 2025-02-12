@@ -1,16 +1,14 @@
 <div class="d-flex flex-row flex-shrink-0 Dashboard">
-  <div
-    class="d-flex flex-column flex-shrink-0 p-3 bg-light side-nav shadow-lg"
-    style="width: 280px"
-  >
+  <!--left side nav -->
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light side-nav shadow-lg">
     <span class="fs-4">Techy Dashboard</span>
     <hr />
     <ul class="nav nav-pills flex-column mb-auto">
       <li>
         <a
           class="nav-link link-dark d-flex"
-          [ngClass]="{ active: mode === 'Products' }"
-          (click)="changeMode('Products')"
+          [ngClass]="{ active: entityType === 'Product' }"
+          (click)="changeEntityType(EntityType.Product)"
           ><mat-icon>precision_manufacturing</mat-icon>
           <p><span *ngIf="user.role === 'VENDOR'">Your </span>Products</p>
         </a>
@@ -18,135 +16,209 @@
       <li *ngIf="user.role === 'ADMIN'">
         <a
           class="nav-link link-dark d-flex"
-          [ngClass]="{ active: mode === 'Categories' }"
-          (click)="changeMode('Categories')"
+          [ngClass]="{ active: entityType === 'Category' }"
+          (click)="changeEntityType(EntityType.Category)"
           ><mat-icon>category</mat-icon> Categories
         </a>
       </li>
       <li *ngIf="user.role === 'ADMIN'">
         <a
           class="nav-link link-dark d-flex"
-          [ngClass]="{ active: mode === 'Brands' }"
-          (click)="changeMode('Brands')"
+          [ngClass]="{ active: entityType === 'Brand' }"
+          (click)="changeEntityType(EntityType.Brand)"
           ><mat-icon>diamond</mat-icon> Brands
         </a>
       </li>
       <li *ngIf="user.role === 'ADMIN'">
         <a
           class="nav-link link-dark d-flex"
-          (click)="changeMode('Orders')"
-          [ngClass]="{ active: mode === 'Orders' }"
+          (click)="changeEntityType(EntityType.Order)"
+          [ngClass]="{ active: entityType === 'Order' }"
           ><mat-icon>local_shipping</mat-icon> Orders
         </a>
       </li>
       <li *ngIf="user.role === 'VENDOR'">
         <a
           class="nav-link link-dark d-flex"
-          (click)="changeMode('OrderItems')"
-          [ngClass]="{ active: mode === 'OrderItems' }"
+          (click)="changeEntityType(EntityType.OrderItem)"
+          [ngClass]="{ active: entityType === 'OrderItem' }"
           ><mat-icon>local_shipping</mat-icon>Your Orders
+        </a>
+      </li>
+      <li *ngIf="user.role === 'ADMIN'">
+        <a
+          class="nav-link link-dark d-flex"
+          (click)="changeEntityType(EntityType.User)"
+          [ngClass]="{ active: entityType === 'User' }"
+          ><mat-icon>person</mat-icon> Users
         </a>
       </li>
     </ul>
   </div>
-  <div class="mat-elevation-z8 main shadow-lg">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col" *ngFor="let header of headers">{{ header }}</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="mode === 'Products'">
-        <tr *ngFor="let product of products">
-          <td>{{ product.id }}</td>
-          <td>{{ product.name }}</td>
-          <td>
-            <img [src]="product.cover" alt="cover" class="cover" />
-          </td>
-          <td>{{ product.inventory }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.brand.name }}</td>
-          <td>{{ product.category.name }}</td>
-          <td>
-            {{ product.vendor.firstName + " " + product.vendor.lastName }}
-          </td>
-          <td>
-            <a class="btn btn-outline-dark">Edit</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="mode === 'Categories'">
-        <tr *ngFor="let category of categories">
-          <td>{{ category.id }}</td>
-          <td>{{ category.name }}</td>
-          <td>{{ category.products?.length }}</td>
-          <td>
-            <a class="btn btn-outline-dark">Edit</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="mode === 'Brands'">
-        <tr *ngFor="let brand of brands">
-          <td>{{ brand.id }}</td>
-          <td>{{ brand.name }}</td>
-          <td>{{ brand.products?.length }}</td>
-          <td>
-            <a class="btn btn-outline-dark">Edit</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="mode === 'Orders'">
-        <tr *ngFor="let order of orders">
-          <td>{{ order.id }}</td>
-          <td>{{ order.orderStatus }}</td>
-          <td>{{ order.totalAmount }}</td>
-          <td>{{ order.address }}</td>
-          <td>{{ order.user!.firstName + " " + order.user!.lastName }}</td>
-          <td>
-            <a class="btn btn-outline-dark">Edit</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="mode === 'OrderItems'">
-        <tr *ngFor="let orderItem of orderItems">
-          <td>{{ orderItem.product?.name }}</td>
-          <td>
-            <img [src]="orderItem.product?.cover" alt="cover" class="cover" />
-          </td>
-          <td>{{ orderItem.quantity }}</td>
-          <td>{{ orderItem.unitPrice }}</td>
-          <td>{{ orderItem.totalPrice }}</td>
-          <td>{{ orderItem.order?.id }}</td>
-          <td>{{ orderItem.order?.orderStatus }}</td>
-          <td>
-            <a class="btn btn-outline-dark">Edit</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <mat-paginator
-      [pageSizeOptions]="[5, 10]"
-      showFirstLastButtons
-      (page)="onPageChange($event)"
-      [length]="pagesCount"
-    >
-    </mat-paginator>
+  <!-- right side -->
+  <div class="main">
+    <app-statistics [user]="user"></app-statistics>
+    <!-- Create or Update operation -->
+    <div *ngIf="currentOperation !== 'None'" class="operation">
+      <app-edit-item
+        [entityType]="entityType"
+        [operationType]="currentOperation"
+        [entity]="editedEntity"
+      ></app-edit-item>
+    </div>
+    <!-- table , delete operation -->
+    <div class="d-flex flex-column" *ngIf="currentOperation === 'None'">
+      <!-- create button -->
+      <button
+        class="align-self-end mb-2"
+        mat-raised-button
+        (click)="currentOperation = Operation.Create; editedEntityIndex = -1"
+        *ngIf="
+          currentOperation === 'None' &&
+          entityType !== 'Order' &&
+          entityType !== 'OrderItem'
+        "
+      >
+        <mat-icon>add</mat-icon>Add New <span>{{ entityType }}</span>
+      </button>
+      <!-- table -->
+      <div
+        class="mat-elevation-z8 shadow-lg"
+        *ngIf="currentOperation === 'None'"
+      >
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col" *ngFor="let header of headers">{{ header }}</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="entityType === 'Product'">
+            <tr *ngFor="let product of products; let i = index">
+              <td>{{ product.id }}</td>
+              <td >{{ product.name }}</td>
+              <td>
+                <img [src]="product.cover" alt="cover" class="cover" />
+              </td>
+              <td>{{ product.inventory }}</td>
+              <td>{{ product.price }}</td>
+              <td>{{ product.brand.name }}</td>
+              <td>{{ product.category.name }}</td>
+              <td>
+                {{ product.vendor.firstName + " " + product.vendor.lastName }}
+              </td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(product, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a class="btn btn-outline-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="entityType === 'Category'">
+            <tr *ngFor="let category of categories; let i = index">
+              <td>{{ category.id }}</td>
+              <td>{{ category.name }}</td>
+              <td>{{ category.products?.length || 0 }}</td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(category, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a class="btn btn-outline-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="entityType === 'Brand'">
+            <tr *ngFor="let brand of brands; let i = index">
+              <td>{{ brand.id }}</td>
+              <td>{{ brand.name }}</td>
+              <td>{{ brand.products?.length || 0 }}</td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(brand, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a class="btn btn-outline-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="entityType === 'Order'">
+            <tr *ngFor="let order of orders; let i = index">
+              <td>{{ order.id }}</td>
+              <td>{{ order.orderStatus }}</td>
+              <td>{{ order.totalAmount }}</td>
+              <td>{{ order.address }}</td>
+              <td>{{ order.user!.firstName + " " + order.user!.lastName }}</td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(order, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a class="btn btn-outline-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="entityType === 'OrderItem'">
+            <tr *ngFor="let orderItem of orderItems; let i = index">
+              <td>{{ orderItem.product?.name }}</td>
+              <td>
+                <img
+                  [src]="orderItem.product?.cover"
+                  alt="cover"
+                  class="cover"
+                />
+              </td>
+              <td>{{ orderItem.quantity }}</td>
+              <td>{{ orderItem.unitPrice }}</td>
+              <td>{{ orderItem.totalPrice }}</td>
+              <td>{{ orderItem.order?.id }}</td>
+              <td>{{ orderItem.order?.orderStatus }}</td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(orderItem, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a class="btn btn-outline-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="entityType === 'User'">
+            <tr *ngFor="let user of users; let i = index">
+              <td>{{ user.id }}</td>
+              <td>{{ user.firstName + " " + user.lastName }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.verified }}</td>
+              <td>{{ user.role }}</td>
+              <td>
+                <a class="btn btn-outline-dark" (click)="editItem(user, i)"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <a
+                  class="btn btn-outline-danger"
+                  (click)="deleteItem('User', user.id)"
+                  >Delete</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="1"
+          [rows]="5"
+          [totalRecords]="totalItemsCount"
+          [rowsPerPageOptions]="[5, 10]"
+        />
+      </div>
+    </div>
   </div>
 </div>

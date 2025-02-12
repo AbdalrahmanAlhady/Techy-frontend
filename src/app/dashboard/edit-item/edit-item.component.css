@@ -1,0 +1,45 @@
+mat-grid-list {
+    width: 100%;
+    padding: 10px;
+}
+
+.upload-cover {
+    padding: 25px;
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 20px;
+}
+
+.no-img {
+    background-color: #83838345;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+}
+
+.submit-btn {
+    margin: 20px auto;
+    width: 10vw;
+}
+
+.product-form,
+.user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+form {
+    align-items: center;
+}
+
+h1 {
+    font-weight: bold
+}

@@ -1,0 +1,17 @@
+.order{
+    width: 60%;
+    margin: 30px auto;
+}
+p{
+    margin: 0;
+    height: fit-content;
+}
+.orderItem-info{
+    width: 40%;
+}
+.final-info{
+    width: fit-content;
+    justify-self: flex-end;
+    align-items: flex-start;
+    font-size: large;
+}

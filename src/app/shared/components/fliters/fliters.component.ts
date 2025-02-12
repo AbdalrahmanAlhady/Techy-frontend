@@ -6,6 +6,7 @@ import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
 
 @Component({
+  standalone: false,
   selector: 'app-filters',
   templateUrl: './fliters.component.html',
   styleUrls: ['./fliters.component.css'],

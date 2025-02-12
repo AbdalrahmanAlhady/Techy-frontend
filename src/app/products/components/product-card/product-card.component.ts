@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from 'src/app/shared/models/Product';
-import { CartService } from 'src/app/shared/services/cart.service';
-
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { Product } from '../../../shared/models/Product';
+import { ProductService } from '../../../shared/services/product.service';
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
+import { CartService } from '../../../shared/services/cart.service';
 
 @Component({
+  standalone: false,
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],

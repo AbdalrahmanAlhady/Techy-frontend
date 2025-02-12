@@ -56,12 +56,14 @@ export const CREATE_PRODUCT_MUTATION = gql`
     $brandId: String!
     $categoryId: String!
     $vendorId: String!
+    $description: String!
   ) {
     createProduct(
       inventory: $inventory
       price: $price
       cover: $cover
       name: $name
+      description: $description
       brandId: $brandId
       categoryId: $categoryId
       vendorId: $vendorId

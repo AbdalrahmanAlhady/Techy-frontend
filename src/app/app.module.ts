@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -20,23 +19,34 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatGridListModule } from '@angular/material/grid-list';
+
+import { CarouselModule } from 'primeng/carousel';
+import { ButtonModule } from 'primeng/button';
+import { ImageModule } from 'primeng/image';
+import { CardModule } from 'primeng/card';
+import { PaginatorModule } from 'primeng/paginator';
+import { DividerModule } from 'primeng/divider';
+import { ChipModule } from 'primeng/chip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './products/products.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
-
 import { CartComponent } from './cart/cart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IconsBaseComponent } from './shared/icons/icons-base/icons-base.component';
 import { LogoComponent } from './shared/icons/logo/logo.component';
-
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { GraphQLModule } from './graphql.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+  HttpClient,
+} from '@angular/common/http';
 import { CloudinaryModule } from '@cloudinary/ng';
-import { PaginationComponent } from './shared/components/pagination/pagination.component';
+import { ProductPaginationComponent } from './shared/components/product-pagination/product-pagination.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthComponent } from './auth/auth.component';
 import { SigninComponent } from './auth/components/signin/signin.component';
@@ -47,13 +57,24 @@ import { VerifyOtpComponent } from './shared/components/verify-otp/verify-otp.co
 import { OptEmailSvgComponent } from './shared/icons/opt-email-svg/opt-email-svg.component';
 import { EmailVerifiedSvgComponent } from './shared/icons/email-verified-svg/email-verified-svg.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
+import { FileUploadModule } from 'primeng/fileupload';
 import { ProductDetailsComponent } from './products/components/product-details/product-details.component';
 import { ProductCardComponent } from './products/components/product-card/product-card.component';
 import { FiltersComponent } from './shared/components/fliters/fliters.component';
 import { SortArrowUpComponent } from './shared/icons/sort-arrow-up/sort-arrow-up.component';
 import { SortArrowDownComponent } from './shared/icons/sort-arrow-down/sort-arrow-down.component';
 import { AuthInterceptor } from './auth/services/auth_interceptor.service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
+import { FormFieldComponent } from './shared/components/form-field/form-field.component';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
+import { UploadSvgComponent } from "./shared/icons/upload-svg/upload-svg.component";
+import { StatisticsComponent } from './dashboard/statistics/statistics.component';
+import { EditItemComponent } from './dashboard/edit-item/edit-item.component';
+import { MyordersComponent } from './myorders/myorders.component';
+import { OrderComponent } from './myorders/order/order.component';
+
 
 @NgModule({
   declarations: [
@@ -68,7 +89,7 @@ import { AuthInterceptor } from './auth/services/auth_interceptor.service';
     ProductCardComponent,
     FooterComponent,
     CarouselComponent,
-    PaginationComponent,
+    ProductPaginationComponent,
     AuthComponent,
     SignupComponent,
     SigninComponent,
@@ -80,11 +101,19 @@ import { AuthInterceptor } from './auth/services/auth_interceptor.service';
     FiltersComponent,
     SortArrowUpComponent,
     SortArrowDownComponent,
+    EditItemComponent,
+    FormFieldComponent,
+    StatisticsComponent,
+    UploadSvgComponent,
+    MyordersComponent,
+    OrderComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    FormsModule,
     AppRoutingModule,
     MatButtonModule,
     MatBadgeModule,
@@ -92,7 +121,6 @@ import { AuthInterceptor } from './auth/services/auth_interceptor.service';
     MatMenuModule,
     CarouselModule,
     GraphQLModule,
-    HttpClientModule,
     CloudinaryModule,
     MatFormFieldModule,
     MatInputModule,
@@ -110,13 +138,28 @@ import { AuthInterceptor } from './auth/services/auth_interceptor.service';
     MatTreeModule,
     MatSliderModule,
     MatAutocompleteModule,
-  ],
+    MatGridListModule,
+    FileUploadModule,
+    ButtonModule,
+    ImageModule,
+    CardModule,
+    PaginatorModule,
+    DividerModule,
+    ChipModule
+],
   providers: [
+    provideAnimationsAsync(),
+    providePrimeNG({
+        theme: {
+            preset: Aura
+        }
+    }),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
     },
+    provideAnimationsAsync('noop'),
   ],
   bootstrap: [AppComponent],
 })

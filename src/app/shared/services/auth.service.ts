@@ -3,9 +3,8 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { EndPoint } from 'src/app/shared/endpoints/EndPoint';
-import { jwtDecode } from 'jwt-decode';
-import { UserService } from 'src/app/shared/services/user.service';
+import {jwtDecode} from 'jwt-decode';
+import { UserService } from './user.service';
 import { User } from '../models/User';
 import { Apollo, MutationResult } from 'apollo-angular';
 import {
@@ -17,6 +16,7 @@ import {
   VERIFY_EMAIL_MUTATION,
 } from '../gql/auth-gql';
 import { LocalStorageService } from './local-storage.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,8 @@ export class AuthService {
   constructor(
     private apollo: Apollo,
     private localStorage: LocalStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private router:Router
   ) {}
   getAccessToken(): string {
     return this.localStorage.getItem('accessToken');
@@ -157,7 +158,8 @@ export class AuthService {
   }
   signout() {
     this.signedIn = false;
-    this.userService.userSignal.set(null);
     this.localStorage.clearAll();
+    this.userService.userSignal.set(null);
+    this.router.navigate(['/']);
   }
 }

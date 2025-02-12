@@ -23,6 +23,16 @@ export const GET_ORDERS_QUERY = gql`
         quantity
         unitPrice
         totalPrice
+        product {
+          id
+          name
+          cover
+          vendor {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
   }
@@ -44,9 +54,14 @@ export const CREATE_ORDER_MUTATION = gql`
     ) {
       id
       orderStatus
-      totalAmount
       deliveryFee
+      totalAmount
       address
+      user {
+        lastName
+        firstName
+        id
+      }
       orderItems {
         id
         quantity
@@ -62,21 +77,24 @@ export const UPDATE_ORDER_MUTATION = gql`
     $deliveryFee: Float
     $totalAmount: Float
     $orderStatus: String
+    $address: String
   ) {
     updateOrder(
       id: $orderId
       deliveryFee: $deliveryFee
       totalAmount: $totalAmount
       orderStatus: $orderStatus
+      address: $address
     ) {
       id
       orderStatus
-      address
       deliveryFee
       totalAmount
+      address
       user {
-        firstName
         lastName
+        firstName
+        id
       }
       orderItems {
         id

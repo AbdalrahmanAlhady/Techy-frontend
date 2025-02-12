@@ -1,8 +1,6 @@
 import { Component, effect, OnInit, untracked } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { OwlOptions } from 'ngx-owl-carousel-o';
 import { map, Observable, startWith } from 'rxjs';
 import { Product } from '../shared/models/Product';
 import { AuthService } from '../shared/services/auth.service';
@@ -10,12 +8,13 @@ import { LocalStorageService } from '../shared/services/local-storage.service';
 import { ProductService } from '../shared/services/product.service';
 
 @Component({
+  standalone: false,
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
-  control = new FormControl('');
+  searchFieldControl = new FormControl('');
   products: Product[] = [];
   sortType: 'Price' | 'Name' | 'Default' = 'Default';
   sortDirection: 'ASC' | 'DESC' = 'ASC';
@@ -27,7 +26,6 @@ export class ProductsComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private cookieService: CookieService,
     private authService: AuthService
   ) {
     effect(() => {
@@ -67,7 +65,7 @@ export class ProductsComponent implements OnInit {
       next: (result) => {
         this.allProductsMiniData = result.data.productsNames;
 
-        this.filteredAllProductsMiniData = this.control.valueChanges.pipe(
+        this.filteredAllProductsMiniData = this.searchFieldControl.valueChanges.pipe(
           startWith(''),
           map((value) =>
             this.allProductsMiniData.filter((prod) =>

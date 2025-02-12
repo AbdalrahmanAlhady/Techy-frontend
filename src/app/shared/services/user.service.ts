@@ -3,6 +3,7 @@ import { Apollo, MutationResult, Query } from 'apollo-angular';
 import {
   CREATE_USER_MUTATION,
   DELETE_USER_MUTATION,
+  GET_USERS_COUNT_QUERY,
   GET_USERS_QUERY,
   UPDATE_USER_MUTATION,
 } from '../gql/user-gql';
@@ -16,14 +17,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  userSignal = signal<User | null>(this.getCurrentUser());
+  userSignal = signal<User | null>(null);
   usersSignal = signal<User[]>([]);
   filtersAppliedSignal = signal<boolean>(false);
   usersPerPage: number = 6;
   currentUsersPageSignal = signal<number>(1);
   queryOptions: GQLQueryOptions = new GQLQueryOptions();
   constructor(
-    private localStorage: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private apollo: Apollo
   ) {
     this.queryOptions.limit = this.usersPerPage;
@@ -32,12 +33,18 @@ export class UserService {
   }
 
   getCurrentUser(): User {
-    return this.localStorage.getItem('user');
+    return this.localStorageService.getItem('user');
   }
 
   setCurrentUser(user: User) {
-    this.localStorage.setItem('user', user);
+    this.localStorageService.setItem('user', user);
     this.userSignal.set(user);
+  }
+  getUsersCount(options?: GQLQueryOptions): Observable<ApolloQueryResult<{ usersCount: number }>> {
+    return this.apollo.watchQuery<{ usersCount: number }>({
+      query: GET_USERS_COUNT_QUERY,
+      variables: { options},
+    }).valueChanges;
   }
   getUsers(
     options?: GQLQueryOptions,
@@ -47,7 +54,7 @@ export class UserService {
       query: GET_USERS_QUERY,
       variables: {
         id: id,
-        options: options,
+        options
       },
     }).valueChanges;
   }
@@ -75,7 +82,8 @@ export class UserService {
     password: string,
     email: string,
     lastName: string,
-    firstName: string
+    firstName: string,
+    verified: boolean
   ): Observable<MutationResult<{ updateUser: User }>> {
     return this.apollo.mutate<{ updateUser: User }>({
       mutation: UPDATE_USER_MUTATION,
@@ -86,6 +94,7 @@ export class UserService {
         email,
         lastName,
         firstName,
+        verified
       },
     });
   }

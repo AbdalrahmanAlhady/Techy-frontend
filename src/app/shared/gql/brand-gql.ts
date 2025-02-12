@@ -26,15 +26,19 @@ export const CREATE_BRAND_MUTATION = gql`
   }
 `;
 export const UPDATE_BRAND_MUTATION = gql`
-  mutation UpdateBrand($name: String!, $id: String!) {
-    updateBrand(name: $name, id: $id) {
+  mutation UpdateBrand($name: String!, $brandId: String!) {
+    updateBrand(name: $name, id: $brandId) {
       id
       name
+      products {
+        id
+        name
+      }
     }
   }
 `;
 export const DELETE_BRAND_MUTATION = gql`
-  mutation DeleteBrand($id: String!) {
-    deleteBrand(id: $id)
+  mutation DeleteBrand($brandId: String!) {
+    deleteBrand(id: $brandId)
   }
 `;

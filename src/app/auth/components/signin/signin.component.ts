@@ -1,15 +1,16 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from '../../services/customvalidation.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ShareDataService } from 'src/app/shared/services/share-data.service';
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { UserService } from 'src/app/shared/services/user.service';
-import { CookieService } from 'ngx-cookie-service';
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
+import { ShareDataService } from '../../../shared/services/share-data.service';
+import { UserService } from '../../../shared/services/user.service';
+
 @Component({
+  standalone: false,
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css'],
@@ -22,29 +23,9 @@ export class SigninComponent {
   forgetPasswordMode: boolean = false;
   forgetPasswordEmail: string = '';
   subscriptions = new Subscription();
-  signinForm = this.formBuilder.group({
-    email: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.email,
-        Validators.pattern('.*com$'),
-        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
-      ]),
-    ],
-    password: ['', Validators.compose([Validators.required])],
-  });
-  sendOtpForm = this.formBuilder.group({
-    email: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.email,
-        Validators.pattern('.*com$'),
-        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
-      ]),
-    ],
-  });
+  signinForm!: FormGroup;
+  sendOtpForm!: FormGroup;
+
   constructor(
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService,
@@ -53,9 +34,32 @@ export class SigninComponent {
     private localStorageService: LocalStorageService,
     private modalService: BsModalService,
     private shareDataService: ShareDataService,
-    private userService: UserService,
-    private cookieService: CookieService
-  ) {}
+    private userService: UserService
+  ) {
+    this.signinForm = this.formBuilder.group({
+      email: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+          Validators.pattern('.*com$'),
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+        ]),
+      ],
+      password: ['', Validators.compose([Validators.required])],
+    });
+    this.sendOtpForm = this.formBuilder.group({
+      email: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+          Validators.pattern('.*com$'),
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+        ]),
+      ],
+    });
+  }
   ngOnInit(): void {}
 
   signin(formData: { email: string; password: string }) {
@@ -67,7 +71,6 @@ export class SigninComponent {
             this.authService.setRefreshToken(res.data?.login.refreshToken);
             this.userService.setCurrentUser(res.data?.login.user);
             this.authService.signedIn = true;
-            console.log(this.cookieService.get('RFToken'));
             this.router.navigate(['/']);
           }
         },

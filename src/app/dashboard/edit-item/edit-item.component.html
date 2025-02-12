@@ -1,0 +1,308 @@
+<div class="bg-light shadow-lg p-3">
+  <h1>{{ operationType }} {{ entityType }}</h1>
+  <form
+    [formGroup]="entityForm"
+    (ngSubmit)="saveEntity()"
+    class="d-flex flex-column"
+  >
+    <!-- Product Form -->
+    <div *ngIf="entityType === 'Product'" class="product-form">
+      <div class="form-row">
+        <app-form-field
+          [form]="entityForm"
+          controlName="name"
+          label="Name"
+          placeholder="Enter product name"
+          [customValidator]="customValidator"
+          icon="label"
+        ></app-form-field>
+        <app-form-field
+          [form]="entityForm"
+          controlName="price"
+          label="Price"
+          placeholder="Enter price"
+          [customValidator]="customValidator"
+          icon="attach_money"
+          type="number"
+        ></app-form-field>
+      </div>
+      <div class="form-row">
+        <app-form-field
+          [form]="entityForm"
+          controlName="description"
+          label="Description"
+          placeholder="Enter description"
+          [customValidator]="customValidator"
+          icon="description"
+        ></app-form-field>
+        <div class="d-flex flex-column">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option
+                *ngFor="let category of categories"
+                [value]="category.id"
+              >
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-error
+              *ngIf="
+                entityForm.controls['category'].touched &&
+                entityForm.controls['category'].errors
+              "
+            >
+              {{ customValidator.getErrorMessage("category", entityForm) }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Brand</mat-label>
+            <mat-select formControlName="brand">
+              <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                {{ brand.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>branding_watermark</mat-icon>
+            <mat-error
+              *ngIf="
+                entityForm.controls['brand'].touched &&
+                entityForm.controls['brand'].errors
+              "
+            >
+              {{ customValidator.getErrorMessage("brand", entityForm) }}
+            </mat-error>
+          </mat-form-field>
+          <app-form-field
+            [form]="entityForm"
+            controlName="inventory"
+            label="Inventory"
+            placeholder="Enter inventory"
+            [customValidator]="customValidator"
+            icon="inventory"
+            type="number"
+          ></app-form-field>
+        </div>
+        <!-- Product Cover -->
+        <div
+          class="d-flex flex-column align-items-center bg-light shadow upload-cover"
+        >
+          <p-image
+            *ngIf="productCoverUrl"
+            class="mb-2"
+            [src]="productCoverUrl"
+            alt="Image"
+            width="250"
+            height="250"
+          />
+          <div
+            *ngIf="!productCoverUrl"
+            class="d-flex flex-column align-items-center no-img"
+          >
+            <app-upload-svg [width]="10" [height]="10"></app-upload-svg>
+            <h2>Upload Product Cover</h2>
+            <p>Image size should be less than 2MB</p>
+          </div>
+          <p-fileupload
+            #fu
+            mode="basic"
+            chooseLabel="Choose"
+            chooseIcon="pi pi-upload"
+            name="demo[]"
+            url="https://www.primefaces.org/cdn/api/upload.php"
+            accept="image/*"
+            maxFileSize="2000000"
+            (onSelect)="onProductCoverSelect($event)"
+          ></p-fileupload>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brand Form -->
+    <div *ngIf="entityType === 'Brand'" class="form-row">
+      <app-form-field
+        [form]="entityForm"
+        controlName="name"
+        label="Name"
+        placeholder="Enter brand name"
+        [customValidator]="customValidator"
+        icon="label"
+      ></app-form-field>
+    </div>
+
+    <!-- Category Form -->
+    <div *ngIf="entityType === 'Category'" class="form-row">
+      <app-form-field
+        [form]="entityForm"
+        controlName="name"
+        label="Name"
+        placeholder="Enter category name"
+        [customValidator]="customValidator"
+        icon="category"
+      ></app-form-field>
+    </div>
+
+    <!-- Order Form -->
+    <div *ngIf="entityType === 'Order'" class="form-row flex-wrap">
+      <mat-form-field appearance="outline">
+        <mat-label>Order Status</mat-label>
+        <mat-select formControlName="orderStatus">
+          <mat-option
+            *ngFor="let status of getOrderStatusValues()"
+            [value]="status"
+          >
+            {{ status }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>status</mat-icon>
+        <mat-error
+          *ngIf="
+            entityForm.controls['orderStatus'].touched &&
+            entityForm.controls['orderStatus'].errors
+          "
+        >
+          {{ customValidator.getErrorMessage("orderStatus", entityForm) }}
+        </mat-error>
+      </mat-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="deliveryFee"
+        label="Delivery Fee"
+        type="number"
+        placeholder="Enter delivery fee"
+        [customValidator]="customValidator"
+        icon="local_shipping"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="totalAmount"
+        label="Total Amount"
+        placeholder="Enter total amount"
+        [customValidator]="customValidator"
+        icon="attach_money"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="address"
+        label="Address"
+        placeholder="Enter address"
+        [customValidator]="customValidator"
+        icon="home"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="userId"
+        label="User ID"
+        placeholder="Enter user ID"
+        [customValidator]="customValidator"
+        icon="person"
+      ></app-form-field>
+    </div>
+
+    <!-- OrderItem Form -->
+    <div *ngIf="entityType === 'OrderItem'" class="form-row">
+      <app-form-field
+        [form]="entityForm"
+        controlName="quantity"
+        label="Quantity"
+        placeholder="Enter quantity"
+        [customValidator]="customValidator"
+        icon="format_list_numbered"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="unitPrice"
+        label="Unit Price"
+        placeholder="Enter unit price"
+        [customValidator]="customValidator"
+        icon="attach_money"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="totalPrice"
+        label="Total Price"
+        placeholder="Enter total price"
+        [customValidator]="customValidator"
+        icon="attach_money"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="productId"
+        label="Product ID"
+        placeholder="Enter product ID"
+        [customValidator]="customValidator"
+        icon="shopping_cart"
+      ></app-form-field>
+      <app-form-field
+        [form]="entityForm"
+        controlName="orderId"
+        label="Order ID"
+        placeholder="Enter order ID"
+        [customValidator]="customValidator"
+        icon="receipt"
+      ></app-form-field>
+    </div>
+
+    <!-- User Form -->
+    <div *ngIf="entityType === 'User'" class="user-form">
+      <div class="form-row flex-wrap">
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option
+              *ngFor="let role of userRoles | keyvalue"
+              [value]="role.value"
+            >
+              {{ role.key }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>edit</mat-icon>
+          <mat-error
+            *ngIf="
+              entityForm.controls['role'].touched &&
+              entityForm.controls['role'].errors
+            "
+          >
+            {{ customValidator.getErrorMessage("role", entityForm) }}
+          </mat-error>
+        </mat-form-field>
+
+        <app-form-field
+          [form]="entityForm"
+          controlName="firstName"
+          label="First Name"
+          placeholder="Enter first name"
+          [customValidator]="customValidator"
+          icon="person"
+        ></app-form-field>
+
+        <app-form-field
+          [form]="entityForm"
+          controlName="lastName"
+          label="Last Name"
+          placeholder="Enter last name"
+          [customValidator]="customValidator"
+          icon="person"
+        ></app-form-field>
+
+        <app-form-field
+          [form]="entityForm"
+          controlName="email"
+          label="Email"
+          placeholder="Enter email"
+          [customValidator]="customValidator"
+          icon="email"
+        ></app-form-field>
+        <mat-radio-group formControlName="verified">
+          <mat-radio-button [value]="true">true</mat-radio-button>
+          <mat-radio-button [value]="false">false</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" class="submit-btn">
+      {{ operationType }}
+    </button>
+  </form>
+  <div *ngIf="backendError" class="alert alert-danger">{{ backendError }}</div>
+</div>

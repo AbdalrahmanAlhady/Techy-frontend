@@ -1,9 +1,11 @@
 import { OrderItem } from './OrderItem';
 import { User } from './User';
-enum OrderStatus {
-  PENDING = 'pending',
-  SHIPPED = 'shipped',
-  CANCELED = 'canceled',
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELED = "CANCELED",
 }
 export interface Order {
   id: string;

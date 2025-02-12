@@ -1,12 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Subscription, timeout } from 'rxjs';
-import { ShareDataService } from 'src/app/shared/services/share-data.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { CustomvalidationService } from 'src/app/auth/services/customvalidation.service';
+import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomvalidationService } from '../../../auth/services/customvalidation.service';
+import { AuthService } from '../../services/auth.service';
+import { ShareDataService } from '../../services/share-data.service';
 
 @Component({
+  standalone: false,
   selector: 'app-verify-otp',
   templateUrl: './verify-otp.component.html',
   styleUrls: ['./verify-otp.component.css'],
@@ -18,34 +19,41 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
   backendError: string = '';
   verified: boolean = false;
   subscriptions = new Subscription();
-  forgetPasswordForm = this.formBuilder.group(
-    {
-      newPassword: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(10),
-          this.customValidator.passwordValidator(),
-        ]),
-      ],
-      cNewPassword: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(10),
-          this.customValidator.passwordValidator(),
-        ]),
-      ],
-    },
-    { validator: this.customValidator.mustMatch('newPassword', 'cNewPassword') }
-  );
+  forgetPasswordForm!: FormGroup;
   constructor(
     private userService: UserService,
     private shareDataService: ShareDataService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService
-  ) {}
+  ) {
+    this.forgetPasswordForm = this.formBuilder.group(
+      {
+        newPassword: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(10),
+            this.customValidator.passwordValidator(),
+          ]),
+        ],
+        cNewPassword: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(10),
+            this.customValidator.passwordValidator(),
+          ]),
+        ],
+      },
+      {
+        validator: this.customValidator.mustMatch(
+          'newPassword',
+          'cNewPassword'
+        ),
+      }
+    );
+  }
   ngOnInit(): void {}
 
   verifyOtp() {

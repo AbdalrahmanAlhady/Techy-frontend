@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="d-flex flex-row flex-wrap justify-content-center">
+    <!-- Products Card -->
+    <p-card class="m-2">
+      <ng-template #title>
+        <mat-icon class="me-2">precision_manufacturing</mat-icon>
+        {{ user.role === "ADMIN" ? "Products" : "Your Products" }}
+      </ng-template>
+      <p class="fw-bold">{{ productsCount }}</p>
+    </p-card>
+
+    <!-- Brands Card (Only for ADMIN) -->
+    <p-card class="m-2" *ngIf="user.role === 'ADMIN'">
+      <ng-template #title>
+        <mat-icon class="me-2">store</mat-icon>
+        Brands
+      </ng-template>
+      <p class="fw-bold">{{ brandsCount }}</p>
+    </p-card>
+
+    <!-- Categories Card (Only for ADMIN) -->
+    <p-card class="m-2" *ngIf="user.role === 'ADMIN'">
+      <ng-template #title>
+        <mat-icon class="me-2">category</mat-icon>
+        Categories
+      </ng-template>
+      <p class="fw-bold">{{ categoriesCount }}</p>
+    </p-card>
+
+    <!-- Orders Card -->
+    <p-card class="m-2" *ngIf="user.role === 'ADMIN'">
+      <ng-template #title>
+        <mat-icon class="me-2">shopping_bag</mat-icon>
+        Orders
+      </ng-template>
+      <p class="fw-bold">{{ ordersCount }}</p>
+    </p-card>
+
+    <p-card class="m-2" *ngIf="user.role === 'VENDOR'">
+      <ng-template #title>
+        <mat-icon class="me-2">shopping_bag</mat-icon>
+        Your Orders
+      </ng-template>
+      <p class="fw-bold">{{ orderItemsCount }}</p>
+    </p-card>
+
+    <!-- Users Card (Only for ADMIN) -->
+    <p-card class="m-2" *ngIf="user.role === 'ADMIN'">
+      <ng-template #title>
+        <mat-icon class="me-2">person</mat-icon>
+        Users
+      </ng-template>
+      <p class="fw-bold">{{ usersCount }}</p>
+    </p-card>
+  </div>
+</div>

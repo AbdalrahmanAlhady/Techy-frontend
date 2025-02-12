@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
@@ -15,49 +16,51 @@ export class SignupComponent implements OnInit, OnDestroy {
   backendError: string = '';
   userRoles = UserRole;
   signedup: boolean = false;
-  signupForm:FormGroup = this.formBuilder.group({
-    role: [UserRole.BUYER, Validators.required],
-    firstName: [
-      '',
-      [Validators.required, Validators.maxLength(20), Validators.minLength(2)],
-    ],
-    lastName: [
-      '',
-      [Validators.required, Validators.maxLength(20), Validators.minLength(2)],
-    ],
-    email: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.email,
-        Validators.pattern('.*com$'),
-        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
-      ]),
-    ],
-    password: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(10),
-        this.customValidator.passwordValidator(),
-      ]),
-    ],
-    cPassword: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(10),
-        this.customValidator.passwordValidator(),
-      ]),
-    ],
-  },{validators: this.customValidator.mustMatch('password', 'cPassword')});
+  signupForm:FormGroup 
   subscriptions = new Subscription();
   constructor(
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService,
     private authService: AuthService,
     private router: Router,
-  ) {}
+  ) {
+  this.signupForm = this.formBuilder.group({
+      role: [UserRole.BUYER, Validators.required],
+      firstName: [
+        '',
+        [Validators.required, Validators.maxLength(20), Validators.minLength(2)],
+      ],
+      lastName: [
+        '',
+        [Validators.required, Validators.maxLength(20), Validators.minLength(2)],
+      ],
+      email: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+          Validators.pattern('.*com$'),
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+        ]),
+      ],
+      password: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(10),
+          this.customValidator.passwordValidator(),
+        ]),
+      ],
+      cPassword: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(10),
+          this.customValidator.passwordValidator(),
+        ]),
+      ],
+    },{validators: this.customValidator.mustMatch('password', 'cPassword')});
+  }
   ngOnInit(): void {}
   switchToSignin() {
     this.router.navigate(['/signin']);

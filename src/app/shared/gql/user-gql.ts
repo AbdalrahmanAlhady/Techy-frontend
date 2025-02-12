@@ -45,14 +45,16 @@ export const CREATE_USER_MUTATION = gql`
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUser(
+    $verified: Boolean!
     $role: UserRole!
-    $password: String!
+    $password: String
     $email: String!
     $lastName: String!
     $firstName: String!
     $id: String!
   ) {
     updateUser(
+      verified: $verified
       role: $role
       password: $password
       email: $email
@@ -61,9 +63,9 @@ export const UPDATE_USER_MUTATION = gql`
       id: $id
     ) {
       id
-      email
       firstName
       lastName
+      email
       verified
       role
     }
@@ -71,8 +73,7 @@ export const UPDATE_USER_MUTATION = gql`
 `;
 
 export const DELETE_USER_MUTATION = gql`
- mutation DeleteUser($id: String!) {
-  deleteUser(id: $id)
-}
+  mutation DeleteUser($id: String!) {
+    deleteUser(id: $id)
+  }
 `;
-

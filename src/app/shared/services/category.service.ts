@@ -33,7 +33,7 @@ export class CategoryService {
     return this.apollo.watchQuery<{ categoriesCount: number }>({
       query: GET_CATEGORIES_COUNT,
       variables: {
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -48,7 +48,7 @@ export class CategoryService {
       query: GET_CATEGORIES_QUERY,
       variables: {
         id: id,
-        options: options,
+        options,
       },
       context: {
         headers: { skip: 'true' },
@@ -72,7 +72,7 @@ export class CategoryService {
     return this.apollo.mutate<{ updateCategory: Category }>({
       mutation: UPDATE_CATEGORY_MUTATION,
       variables: {
-        id,
+        categoryId: id,
         name,
       },
     });
@@ -83,7 +83,7 @@ export class CategoryService {
     return this.apollo.mutate<{ deleteCategory: boolean }>({
       mutation: CREATE_CATEGORY_MUTATION,
       variables: {
-        id,
+        categoryId: id,
       },
     });
   }

@@ -1,6 +1,15 @@
 import { gql } from 'apollo-angular';
 
-export const ORDER_ITEMS_QUERY = gql`
+export const GET_ORDER_ITEMS_COUNT_QUERY = gql`
+  query OrderItemsCount(
+    $options: QueryOptionsInput
+    $orderId: String
+    $vendorId: String!
+  ) {
+    orderItemsCount(orderId: $orderId, options: $options, vendorId: $vendorId)
+  }
+`;
+export const GET_ORDER_ITEMS_QUERY = gql`
   query OrderItems(
     $options: QueryOptionsInput
     $vendorId: String
@@ -21,6 +30,11 @@ export const ORDER_ITEMS_QUERY = gql`
         id
         name
         cover
+        vendor {
+          id
+          firstName
+          lastName
+        }
       }
       order {
         id
@@ -49,14 +63,14 @@ export const CREATE_ORDER_ITEM_MUTATION = gql`
       quantity
       totalPrice
       unitPrice
-      order {
-        id
-        orderStatus
-      }
       product {
         id
         name
         cover
+      }
+      order {
+        id
+        orderStatus
       }
     }
   }
@@ -79,14 +93,14 @@ export const UPDATE_ORDER_ITEM_MUTATION = gql`
       quantity
       totalPrice
       unitPrice
-      order {
-        id
-        orderStatus
-      }
       product {
         id
         name
         cover
+      }
+      order {
+        id
+        orderStatus
       }
     }
   }

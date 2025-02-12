@@ -6,10 +6,11 @@ import { OrderService } from '../shared/services/order.service';
 import { Order } from '../shared/models/Order';
 import { OrderItem } from '../shared/models/OrderItem';
 import { CartService } from '../shared/services/cart.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from '../auth/services/customvalidation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
@@ -24,56 +25,7 @@ export class CartComponent implements OnInit {
   ];
   error: string = '';
   address: string = '';
-  addressForm = this.formBuilder.group({
-    floor: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(10),
-      ]),
-    ],
-    buildingNumber: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(10),
-      ]),
-    ],
-    street: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(10),
-      ]),
-    ],
-    neighborhood: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(10),
-      ]),
-    ],
-    city: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(10),
-      ]),
-    ],
-    country: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(10),
-      ]),
-    ],
-  });
+  addressForm: FormGroup; 
   constructor(
     private cartService: CartService,
     private localStorageService: LocalStorageService,
@@ -81,7 +33,58 @@ export class CartComponent implements OnInit {
     private orderService: OrderService,
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService
-  ) {}
+  ) {
+    this.addressForm = this.formBuilder.group({
+      floor: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(10),
+        ]),
+      ],
+      buildingNumber: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(10),
+        ]),
+      ],
+      street: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(10),
+        ]),
+      ],
+      neighborhood: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ]),
+      ],
+      city: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ]),
+      ],
+      country: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ]),
+      ],
+    });
+  }
   ngOnInit(): void {
     this.orderItems = this.localStorageService.getItem('cart');
     if (this.orderItems.length === 0) {

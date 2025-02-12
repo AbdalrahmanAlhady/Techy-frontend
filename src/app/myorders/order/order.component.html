@@ -1,0 +1,49 @@
+<div class="order shadow p-5" *ngIf="order">
+  <div class="d-flex flex-row mb-3">
+    <p-chip class="m-1">
+      <p>Order Status</p>
+      <strong class="text-primary"> {{ order.orderStatus }}</strong>
+    </p-chip>
+    <p-chip class="m-1">
+      <strong class="text-primary"> Order #{{ order.id }}</strong>
+    </p-chip>
+    <button mat-stroked-button >
+      <mat-icon>close</mat-icon>Cancel
+    </button>
+  </div>
+
+  <div
+    *ngFor="let orderItem of order.orderItems"
+    class="orderItem-container d-flex flex-column shadow p-4 mb-3"
+  >
+    <div class="orderItem d-flex flex-row">
+      <p-image
+        [src]="orderItem.product?.cover"
+        height="200"
+        width="200"
+      ></p-image>
+      <div class="orderItem-info d-flex flex-column">
+        <h2 class="fw-bold">{{ orderItem.product?.name }}</h2>
+        <P class="fw-bold text-secondary">
+          By: {{ orderItem.product?.vendor?.firstName }}
+          {{ orderItem.product?.vendor?.lastName }}</P
+        >
+        <div class="d-flex flex-row align-items-center">
+          <p class="fw-bold text-secondary">Qty: {{ orderItem.quantity }}</p>
+          <p-divider layout="vertical" />
+          <p class="fw-bold text-secondary">
+            Item Price: {{ orderItem.unitPrice }}
+          </p>
+        </div>
+
+        <p class="text-dark fw-bold fs-6 mt-5">
+          Total price: {{ orderItem.totalPrice }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column final-info p-2">
+    <p class="fw-bold">Delivery: {{ order.deliveryFee }}</p>
+    <p class="fw-bold text-primary">Total Amount: {{ order.totalAmount }}</p>
+  </div>
+</div>

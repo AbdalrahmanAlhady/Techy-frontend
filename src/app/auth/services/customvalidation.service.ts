@@ -35,34 +35,36 @@ export class CustomvalidationService {
 
     return null;
   }
-    mustMatch(controlName: string, matchingControlName: string): ValidatorFn {
+  mustMatch(controlName: string, matchingControlName: string): ValidatorFn {
     return (formGroup: AbstractControl): ValidationErrors | null => {
       const control = formGroup.get(controlName);
       const matchingControl = formGroup.get(matchingControlName);
-  
+
       if (!control || !matchingControl) {
-        console.error(`Form controls not found: ${controlName}, ${matchingControlName}`);
+        console.error(
+          `Form controls not found: ${controlName}, ${matchingControlName}`
+        );
         return null;
       }
-  
+
       if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
         // return if another validator has already found an error on the matchingControl
         return null;
       }
-  
+
       // set error on matchingControl if validation fails
       if (control.value !== matchingControl.value) {
         matchingControl.setErrors({ mustMatch: true });
       } else {
         matchingControl.setErrors(null);
       }
-  
+
       return null;
     };
   }
   public getErrorMessage(controlName: string, form: FormGroup) {
     const control = form.controls[controlName];
-    console.log(controlName,control);
+    console.log(controlName, control);
     if (control.errors) {
       if (control.errors['required']) {
         return `${this.getFieldName(controlName)} is required.`;
@@ -94,7 +96,9 @@ export class CustomvalidationService {
         return 'First Name';
       case 'lastName':
         return 'Last Name';
-      case 'cPassword' || 'password':
+      case 'cPassword':
+        return 'Confirm Password';
+      case 'password':
         return 'Password';
       case 'email':
         return 'Email';

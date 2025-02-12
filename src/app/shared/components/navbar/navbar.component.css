@@ -1,28 +1,8 @@
-.nav {
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-}
-
-.nav-link {
-    display: block;
-    text-decoration: none;
-}
-
 mat-icon {
     transform: scale(1.5) !important;
 }
 
 app-logo {
     cursor: pointer;
-}
-
-.empty-cart-snackbar {
-    background-color: #fff !important;
-    color: #000 !important;
-    border-radius: 0 !important;
-    border: 1px solid #000 !important;
 }
 
