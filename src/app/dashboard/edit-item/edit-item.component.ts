@@ -159,7 +159,15 @@ export class EditItemComponent implements OnInit {
               Validators.minLength(2),
             ],
           ],
-          email: ['', [Validators.required, Validators.email]],
+          email: [
+            '',
+            Validators.compose([
+              Validators.required,
+              Validators.email,
+              Validators.pattern('.*com$'),
+              Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+            ]),
+          ],
           verified: [false, Validators.required],
         });
         break;
@@ -211,6 +219,7 @@ export class EditItemComponent implements OnInit {
         case 'Order':
           this.orderService
             .createOrder(
+              '',
               formData.orderItems,
               formData.userId,
               formData.totalAmount,

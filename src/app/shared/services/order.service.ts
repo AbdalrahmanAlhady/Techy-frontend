@@ -36,7 +36,7 @@ export class OrderService {
     return this.apollo.watchQuery<{ ordersCount: number }>({
       query: GET_ORDERS_COUNT_QUERY,
       variables: {
-        options
+        options,
       },
     }).valueChanges;
   }
@@ -49,11 +49,12 @@ export class OrderService {
       query: GET_ORDERS_QUERY,
       variables: {
         id: id,
-        options
+        options,
       },
     }).valueChanges;
   }
   createOrder(
+    stripePaymentId: string,
     orderItems: OrderItem[],
     userId: string,
     totalAmount: number,
@@ -63,8 +64,9 @@ export class OrderService {
     return this.apollo.mutate<{ createOrder: Order }>({
       mutation: CREATE_ORDER_MUTATION,
       variables: {
+        stripePaymentId,
         orderItems,
-        userId,
+        userId: userId + '',
         totalAmount,
         deliveryFee,
         address,
@@ -85,7 +87,7 @@ export class OrderService {
         deliveryFee,
         totalAmount,
         orderStatus,
-        address
+        address,
       },
     });
   }

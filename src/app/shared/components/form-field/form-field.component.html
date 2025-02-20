@@ -1,13 +1,19 @@
 <div [formGroup]="form">
-  <mat-form-field appearance="outline" *ngIf="form">
+  <mat-form-field
+    appearance="outline"
+    *ngIf="form"
+    [style.width.vw]="width"
+  >
     <mat-label>{{ label }}</mat-label>
-    <input *ngIf="controlName !=='description'"
+    <input
+      *ngIf="controlName !== 'description'"
       matInput
       [formControlName]="controlName"
       [placeholder]="placeholder"
       [type]="type || 'text'"
     />
-    <textarea *ngIf="controlName ==='description'"
+    <textarea
+      *ngIf="controlName === 'description'"
       matInput
       [formControlName]="controlName"
       [placeholder]="placeholder"

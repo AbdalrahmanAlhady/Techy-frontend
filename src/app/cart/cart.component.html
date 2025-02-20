@@ -91,6 +91,16 @@
             [formGroup]="addressForm"
           >
             <mat-form-field appearance="fill" [hideRequiredMarker]="true">
+              <mat-label>zip code</mat-label>
+              <input
+                formControlName="zipCode"
+                id="zipCode"
+                matInput
+                placeholder="Enter zip code"
+                type="text"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" [hideRequiredMarker]="true">
               <mat-label>Floor no.</mat-label>
               <input
                 formControlName="floor"
@@ -155,6 +165,14 @@
       </ul>
       <mat-error
         *ngIf="
+          addressForm.controls['zipCode'].touched &&
+          addressForm.controls['zipCode'].errors
+        "
+      >
+        {{ customValidator.getErrorMessage("zipCode", addressForm) }}
+      </mat-error>
+      <mat-error
+        *ngIf="
           addressForm.controls['country'].touched &&
           addressForm.controls['country'].errors
         "
@@ -209,12 +227,14 @@
         style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
       >
         <div class="col"><b>Total Price</b></div>
-        <div class="col text-right" style="text-align-last: right">{{ calcTotal() + 5 }} &dollar;</div>
+        <div class="col text-right" style="text-align-last: right">
+          {{ calcTotal() + deliveryFee }} &dollar;
+        </div>
         <button
           mat-flat-button
           extended
           class="checkout-btn"
-          (click)="createOrder()"
+          (click)="checkout()"
         >
           CHECKOUT
         </button>
@@ -222,3 +242,43 @@
     </div>
   </div>
 </div>
+<ng-template #paymentModal>
+  <app-modal
+    [title]="'Payment'"
+    (closeModal)="closePaymentModal()"
+    [modalRef]="modalRef!"
+  >
+    <div class="d-flex justify-content-center" *ngIf="paying">
+      <div
+        class="spinner-border text-primary justify-content-center"
+        role="status"
+        style="width: 20rem; height: 20rem"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center" *ngIf="paymentDone">
+      <app-payment-done
+        [width]="20"
+        [height]="20"
+      ></app-payment-done>
+    </div>
+    <P *ngIf="paymentDone" class="text-success payment-done-text"> Payment Done</P>
+    <ngx-stripe-elements
+      [stripe]="stripe"
+      [elementsOptions]="elementsOptions"
+      [ngClass]="{ 'd-none': paying || paymentDone }"
+    >
+      <ngx-stripe-payment [options]="paymentElementOptions" />
+    </ngx-stripe-elements>
+    <button
+      mat-raised-button
+      (click)="pay()"
+      footer
+      class="pay-btn"
+      *ngIf="!paying && !paymentDone"
+    >
+      Pay <span class="text-success">{{ calcTotal() + deliveryFee }} $</span>
+    </button>
+  </app-modal>
+</ng-template>

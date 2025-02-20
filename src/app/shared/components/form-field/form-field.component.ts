@@ -15,4 +15,5 @@ export class FormFieldComponent {
   @Input() type: string = 'text';
   @Input() customValidator: any;
   @Input() icon: string = 'edit';
+  @Input() width!: number
 }

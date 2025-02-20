@@ -44,8 +44,11 @@ export const CREATE_ORDER_MUTATION = gql`
     $address: String!
     $totalAmount: Float!
     $deliveryFee: Float!
+    $stripePaymentId: String
+
   ) {
     createOrder(
+      stripePaymentId: $stripePaymentId
       orderItems: $orderItems
       userId: $userId
       totalAmount: $totalAmount

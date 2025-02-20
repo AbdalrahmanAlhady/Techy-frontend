@@ -21,6 +21,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 
+import { NgxStripeModule } from 'ngx-stripe';
+
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
@@ -58,6 +60,8 @@ import { OptEmailSvgComponent } from './shared/icons/opt-email-svg/opt-email-svg
 import { EmailVerifiedSvgComponent } from './shared/icons/email-verified-svg/email-verified-svg.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'primeng/fileupload';
+
+
 import { ProductDetailsComponent } from './products/components/product-details/product-details.component';
 import { ProductCardComponent } from './products/components/product-card/product-card.component';
 import { FiltersComponent } from './shared/components/fliters/fliters.component';
@@ -69,12 +73,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { FormFieldComponent } from './shared/components/form-field/form-field.component';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { UploadSvgComponent } from "./shared/icons/upload-svg/upload-svg.component";
+import { UploadSvgComponent } from './shared/icons/upload-svg/upload-svg.component';
 import { StatisticsComponent } from './dashboard/statistics/statistics.component';
 import { EditItemComponent } from './dashboard/edit-item/edit-item.component';
 import { MyordersComponent } from './myorders/myorders.component';
 import { OrderComponent } from './myorders/order/order.component';
-
+import { PersonalInfoComponent } from './personal-info/personal-info.component';
+import { PaymentDoneComponent } from "./shared/icons/payment-done/payment-done.component";
 
 @NgModule({
   declarations: [
@@ -106,7 +111,8 @@ import { OrderComponent } from './myorders/order/order.component';
     StatisticsComponent,
     UploadSvgComponent,
     MyordersComponent,
-    OrderComponent
+    OrderComponent,
+    PersonalInfoComponent,
   ],
   imports: [
     HttpClientModule,
@@ -145,14 +151,16 @@ import { OrderComponent } from './myorders/order/order.component';
     CardModule,
     PaginatorModule,
     DividerModule,
-    ChipModule
+    ChipModule,
+    NgxStripeModule.forRoot(),
+    PaymentDoneComponent
 ],
   providers: [
     provideAnimationsAsync(),
     providePrimeNG({
-        theme: {
-            preset: Aura
-        }
+      theme: {
+        preset: Aura,
+      },
     }),
     {
       provide: HTTP_INTERCEPTORS,
