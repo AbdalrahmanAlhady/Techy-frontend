@@ -14,11 +14,7 @@
       id="navbarSupportedContent"
     >
       <!-- cart button -->
-      <button
-        mat-button
-        class="text-dark"
-        (click)="toCart()"
-      >
+      <button mat-button class="text-dark" (click)="toCart()">
         <mat-icon
           [matBadge]="cartLength"
           matBadgePosition="after"
@@ -47,7 +43,9 @@
         <mat-icon>person</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Profile</button>
+        <button mat-menu-item [routerLink]="['/personal-info']">
+          Personal Information
+        </button>
         <button mat-menu-item [routerLink]="['/myorders']">My orders</button>
         <button mat-menu-item [routerLink]="['/dashboard']">Dashboard</button>
         <button mat-menu-item (click)="logout()">Logout</button>

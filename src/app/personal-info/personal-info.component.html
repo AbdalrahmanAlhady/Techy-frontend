@@ -1,0 +1,46 @@
+<form
+  [formGroup]="infoForm"
+  (ngSubmit)="update()"
+  class="d-flex flex-column shadow m-5 p-5"
+>
+  <app-form-field
+    [form]="infoForm"
+    controlName="firstName"
+    label="First Name"
+    placeholder="Enter first name"
+    [customValidator]="customValidator"
+    icon="person"
+    [width]="30"
+  ></app-form-field>
+
+  <app-form-field
+    [form]="infoForm"
+    controlName="lastName"
+    label="Last Name"
+    placeholder="Enter last name"
+    [customValidator]="customValidator"
+    icon="person"
+    [width]="30"
+  ></app-form-field>
+
+  <app-form-field
+    [form]="infoForm"
+    controlName="email"
+    label="Email"
+    placeholder="Enter email"
+    [customValidator]="customValidator"
+    icon="email"
+    [width]="30"
+  ></app-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    class="submit-btn"
+    [disabled]="!formHasChanged || !infoForm.valid"
+  >
+    Update Information
+  </button>
+</form>
+<div *ngIf="backendError" class="alert alert-danger">{{ backendError }}</div>
