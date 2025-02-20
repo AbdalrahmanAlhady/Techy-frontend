@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserRole } from '../shared/models/User';
 import { CustomvalidationService } from '../auth/services/customvalidation.service';
 import { UserService } from '../shared/services/user.service';
+import { AuthService } from '../shared/services/auth.service';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   standalone: false,
@@ -11,14 +13,19 @@ import { UserService } from '../shared/services/user.service';
   styleUrl: './personal-info.component.css',
 })
 export class PersonalInfoComponent implements OnInit {
+  @ViewChild('doneModal') doneModal!: TemplateRef<void>;
+  modalRef?: BsModalRef;
   user!: User;
   infoForm!: FormGroup;
+  passwordForm!: FormGroup;
   backendError: string = '';
   formHasChanged: boolean = false;
+  passwordUpdated: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) {
     this.infoForm = this.formBuilder.group(
       {
@@ -66,6 +73,33 @@ export class PersonalInfoComponent implements OnInit {
       }
       // { validators: this.customValidator.mustMatch('password', 'cPassword') }
     );
+    this.passwordForm = this.formBuilder.group(
+      {
+        currentPassword: ['', Validators.required],
+        newPassword: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(10),
+            this.customValidator.passwordValidator(),
+          ]),
+        ],
+        cNewPassword: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(10),
+            this.customValidator.passwordValidator(),
+          ]),
+        ],
+      },
+      {
+        validators: this.customValidator.mustMatch(
+          'newPassword',
+          'cNewPassword'
+        ),
+      }
+    );
   }
   ngOnInit(): void {
     this.user = this.userService.getCurrentUser();
@@ -80,10 +114,55 @@ export class PersonalInfoComponent implements OnInit {
         this.infoForm.value.email === this.user.email
       ) {
         this.formHasChanged = false;
-      }else{
+      } else {
         this.formHasChanged = true;
       }
     });
   }
-  update() {}
+  updateInfo() {
+    this.userService
+      .updateUser(
+        this.user.id,
+        this.user.role,
+        this.infoForm.value.lastName,
+        this.infoForm.value.firstName,
+        this.infoForm.value.email,
+        this.user.verified,
+        null
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.data?.updateUser) {
+            this.userService.setCurrentUser(res.data.updateUser);
+            this.formHasChanged = false;
+          } else {
+            this.backendError = 'error';
+          }
+        },
+        error: (error) => {
+          this.backendError = error.message;
+        },
+      });
+  }
+  updatePassword() {
+    this.authService
+      .changeOrForgetPassword(
+        this.user.email,
+        this.passwordForm.value.newPassword,
+        this.passwordForm.value.cNewPassword,
+        this.passwordForm.value.currentPassword
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.data?.resetPassword) {
+            this.passwordUpdated = true;
+          } else {
+            this.backendError = 'error';
+          }
+        },
+        error: (error) => {
+          this.backendError = error.message;
+        },
+      });
+  }
 }

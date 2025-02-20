@@ -23,6 +23,7 @@ const routes: Routes = [
   },
   { component: SignupComponent, canActivate: [AuthPageGuard], path: 'signup' },
   { component: SigninComponent, canActivate: [AuthPageGuard], path: 'signin' },
+  { component: SigninComponent,  path: 'signin/:mode' },
   { component: MyordersComponent, canActivate: [AuthGuard], path: 'myorders' },
   {
     component: PersonalInfoComponent,

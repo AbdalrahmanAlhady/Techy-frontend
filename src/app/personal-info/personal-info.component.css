@@ -1,3 +1,20 @@
 form {
-    align-items: center;
+  justify-self: center;
+  margin: 10vh 10vh 0 10vh;
+  min-height: 50vh;
+}
+.mat-tab{
+    height: 50px;
+}
+    
+.account {
+    color: black;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    width: max-content;
+    place-self: center;
+}
+a{
+    color: blue; text-decoration: none; cursor: pointer
 }

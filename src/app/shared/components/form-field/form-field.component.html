@@ -1,5 +1,5 @@
-<div [formGroup]="form">
-  <mat-form-field
+<div [formGroup]="form" class="d-flex flex-column" style="min-height: max-content;">
+  <mat-form-field 
     appearance="outline"
     *ngIf="form"
     [style.width.vw]="width"
@@ -21,7 +21,7 @@
       cdkTextareaAutosize
     ></textarea>
     <mat-icon matSuffix>{{ icon }}</mat-icon>
-    <mat-error
+    <mat-error 
       *ngIf="
         form.controls[controlName].touched && form.controls[controlName].errors
       "

@@ -20,6 +20,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { NgxStripeModule } from 'ngx-stripe';
 
@@ -153,7 +154,8 @@ import { PaymentDoneComponent } from "./shared/icons/payment-done/payment-done.c
     DividerModule,
     ChipModule,
     NgxStripeModule.forRoot(),
-    PaymentDoneComponent
+    PaymentDoneComponent,
+    MatTabsModule
 ],
   providers: [
     provideAnimationsAsync(),
