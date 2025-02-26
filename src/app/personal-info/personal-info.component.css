@@ -1,11 +1,8 @@
 form {
-  justify-self: center;
-  margin: 10vh 10vh 0 10vh;
-  min-height: 50vh;
+  margin: 20px auto;
+  width: 30%;
 }
-.mat-tab{
-    height: 50px;
-}
+
     
 .account {
     color: black;

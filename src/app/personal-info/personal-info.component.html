@@ -13,7 +13,7 @@
           placeholder="Enter first name"
           [customValidator]="customValidator"
           icon="person"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
 
         <app-form-field
@@ -23,7 +23,7 @@
           placeholder="Enter last name"
           [customValidator]="customValidator"
           icon="person"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
 
         <app-form-field
@@ -33,7 +33,7 @@
           placeholder="Enter email"
           [customValidator]="customValidator"
           icon="email"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
 
         <button
@@ -60,7 +60,7 @@
           placeholder="Enter Current Password"
           [customValidator]="customValidator"
           icon="lock"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
         <app-form-field
           [form]="passwordForm"
@@ -69,7 +69,7 @@
           placeholder="Enter password"
           [customValidator]="customValidator"
           icon="lock"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
 
         <app-form-field
@@ -79,7 +79,7 @@
           placeholder="Confirm New password"
           [customValidator]="customValidator"
           icon="lock"
-          [width]="30"
+          [outsideError]="true"
         ></app-form-field>
 
         <button
@@ -93,7 +93,7 @@
         </button>
         <p class="account">
           Forget your password?
-          <a  style="color: blue" [routerLink]="'/signin/fp'">reset password</a>
+          <a style="color: blue" [routerLink]="'/signin/fp'">reset password</a>
         </p>
       </form>
     </mat-tab>
@@ -107,4 +107,3 @@
     </app-modal>
   </ng-template>
 </div>
-

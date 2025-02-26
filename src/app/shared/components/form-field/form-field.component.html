@@ -1,8 +1,11 @@
-<div [formGroup]="form" class="d-flex flex-column" style="min-height: max-content;">
-  <mat-form-field 
+<div [formGroup]="form" class="d-flex flex-column wrapper">
+  <mat-form-field
+    [ngStyle]="outsideError ? { 'margin-bottom': '15px' } : {}"
     appearance="outline"
     *ngIf="form"
     [style.width.vw]="width"
+    [subscriptSizing]="outsideError ? 'dynamic' : 'fixed'"
+    hideRequiredMarker="true"
   >
     <mat-label>{{ label }}</mat-label>
     <input
@@ -21,7 +24,7 @@
       cdkTextareaAutosize
     ></textarea>
     <mat-icon matSuffix>{{ icon }}</mat-icon>
-    <mat-error 
+    <mat-error
       *ngIf="
         form.controls[controlName].touched && form.controls[controlName].errors
       "

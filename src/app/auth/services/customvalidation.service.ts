@@ -102,6 +102,10 @@ export class CustomvalidationService {
         return 'Password';
       case 'email':
         return 'Email';
+      case 'cNewPassword':
+        return 'Confirm New Password';
+      case 'newPassword':
+        return 'New Password';
       default:
         return controlName;
     }
