@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { User } from '../models/User';
 import { Apollo, MutationResult } from 'apollo-angular';
 import {
+  Forget_PASSWORD_MUTATION,
   REFRESH_ACCESS_TOKEN_MUTATION,
   REGISTER_MUTATION,
   RESET_PASSWORD_MUTATION,
@@ -110,10 +111,10 @@ export class AuthService {
     newPassword: string,
     cNewPassword: string,
     currentPassword?: string, //only in change password
-    OTP?: string //only in forget password
+    OTP?: string|null //only in forget password
   ): Observable<MutationResult<{ resetPassword: boolean }>> {
     return this.apollo.mutate<{ resetPassword: boolean }>({
-      mutation: RESET_PASSWORD_MUTATION,
+      mutation: OTP ? Forget_PASSWORD_MUTATION : RESET_PASSWORD_MUTATION,
       variables: {
         email,
         password: newPassword,

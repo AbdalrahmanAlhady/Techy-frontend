@@ -4,7 +4,7 @@ import { User, UserRole } from '../shared/models/User';
 import { CustomvalidationService } from '../auth/services/customvalidation.service';
 import { UserService } from '../shared/services/user.service';
 import { AuthService } from '../shared/services/auth.service';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   standalone: false,
@@ -25,7 +25,8 @@ export class PersonalInfoComponent implements OnInit {
     private formBuilder: FormBuilder,
     public customValidator: CustomvalidationService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: BsModalService
   ) {
     this.infoForm = this.formBuilder.group(
       {
@@ -54,24 +55,9 @@ export class PersonalInfoComponent implements OnInit {
             Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
           ]),
         ],
-        // password: [
-        //   '',
-        //   Validators.compose([
-        //     Validators.required,
-        //     Validators.minLength(10),
-        //     this.customValidator.passwordValidator(),
-        //   ]),
-        // ],
-        // cPassword: [
-        //   '',
-        //   Validators.compose([
-        //     Validators.required,
-        //     Validators.minLength(10),
-        //     this.customValidator.passwordValidator(),
-        //   ]),
-        // ],
+       
       }
-      // { validators: this.customValidator.mustMatch('password', 'cPassword') }
+
     );
     this.passwordForm = this.formBuilder.group(
       {
@@ -103,7 +89,11 @@ export class PersonalInfoComponent implements OnInit {
   }
   ngOnInit(): void {
     this.user = this.userService.getCurrentUser();
-    this.infoForm.patchValue(this.user);
+    this.infoForm.patchValue({
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      email: this.user.email,
+    });
     this.listenInfoChanged();
   }
   listenInfoChanged(): void {
@@ -117,24 +107,29 @@ export class PersonalInfoComponent implements OnInit {
       } else {
         this.formHasChanged = true;
       }
+      console.log(this.formHasChanged, this.infoForm);
     });
   }
   updateInfo() {
     this.userService
       .updateUser(
-        this.user.id,
+        this.user.id + '',
         this.user.role,
+        this.infoForm.value.email,
         this.infoForm.value.lastName,
         this.infoForm.value.firstName,
-        this.infoForm.value.email,
         this.user.verified,
         null
       )
       .subscribe({
         next: (res) => {
           if (res.data?.updateUser) {
+            this.modalRef = this.modalService.show(this.doneModal);
             this.userService.setCurrentUser(res.data.updateUser);
             this.formHasChanged = false;
+            setTimeout(() => {
+              this.modalRef?.hide();
+            },  2500);
           } else {
             this.backendError = 'error';
           }
@@ -155,7 +150,12 @@ export class PersonalInfoComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.data?.resetPassword) {
+            this.modalRef = this.modalService.show(this.doneModal);
+            this.passwordForm.reset();
             this.passwordUpdated = true;
+            setTimeout(() => {
+              this.modalRef?.hide();
+            }, 2500);
           } else {
             this.backendError = 'error';
           }

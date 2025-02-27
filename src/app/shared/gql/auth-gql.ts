@@ -54,6 +54,21 @@ export const VERIFY_EMAIL_MUTATION = gql`
 // reset password using otp
 export const RESET_PASSWORD_MUTATION = gql`
   mutation ResetPassword(
+    $currentPassword: String
+    $cPassword: String!
+    $password: String!
+    $email: String!
+  ) {
+    resetPassword(
+    currentPassword: $currentPassword
+      cPassword: $cPassword
+      password: $password
+      email: $email
+    )
+  }
+`;
+export const Forget_PASSWORD_MUTATION = gql`
+  mutation ResetPassword(
     $code: String!
     $cPassword: String!
     $password: String!
