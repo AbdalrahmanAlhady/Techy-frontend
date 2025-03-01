@@ -43,14 +43,10 @@ export class NavbarComponent implements OnInit {
     private userService: UserService
   ) {
     effect(() => {
-      if (this.userService.userSignal()) {
-        this.user = this.userService.userSignal();
-      } else if (
-        !this.userService.getCurrentUser() &&
-        !this.userService.userSignal()
-      ) {
-        this.user = null;
-      }
+      this.user =
+        this.userService.userSignal() ||
+        this.userService.getCurrentUser() ||
+        null;
       if (this.cartService.updateCartLengthSignal() > 0)
         this.cartLength = this.cartService.updateCartLengthSignal();
     });
@@ -102,6 +98,5 @@ export class NavbarComponent implements OnInit {
   }
   logout() {
     this.authService.signout();
-    this.router.navigate(['/']);
   }
 }

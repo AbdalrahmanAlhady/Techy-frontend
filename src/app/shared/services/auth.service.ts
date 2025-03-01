@@ -162,5 +162,6 @@ export class AuthService {
     this.localStorage.clearAll();
     this.userService.userSignal.set(null);
     this.router.navigate(['/']);
+    window.location.reload();
   }
 }
