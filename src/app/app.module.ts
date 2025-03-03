@@ -155,7 +155,8 @@ import { PaymentDoneComponent } from "./shared/icons/payment-done/payment-done.c
     ChipModule,
     NgxStripeModule.forRoot(),
     PaymentDoneComponent,
-    MatTabsModule
+    MatTabsModule,
+    
 ],
   providers: [
     provideAnimationsAsync(),

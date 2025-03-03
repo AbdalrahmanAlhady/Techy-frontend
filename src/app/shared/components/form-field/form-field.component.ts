@@ -17,4 +17,5 @@ export class FormFieldComponent {
   @Input() icon: string = 'edit';
   @Input() width!: number;
   @Input() outsideError: boolean = false;
+  @Input() textArea: boolean = false;
 }

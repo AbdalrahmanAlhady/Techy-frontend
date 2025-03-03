@@ -74,7 +74,7 @@
 <div
   class="alert alert-warning text-center"
   role="alert"
-  *ngIf="user && !user.verified && user.role !== 'ADMIN'"
+  *ngIf="user && !user.verified "
 >
   Your Email Is Not Verified.
   <a (click)="verifyEmail()" class="alert-link">Click Here To Verify</a>

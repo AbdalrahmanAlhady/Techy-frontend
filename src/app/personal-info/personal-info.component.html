@@ -54,6 +54,7 @@
         (ngSubmit)="updatePassword()"
       >
         <app-form-field
+        type="password"
           [form]="passwordForm"
           controlName="currentPassword"
           label="current Password"
@@ -63,6 +64,7 @@
           [outsideError]="true"
         ></app-form-field>
         <app-form-field
+          type="password"
           [form]="passwordForm"
           controlName="newPassword"
           label="New Password"
@@ -71,8 +73,8 @@
           icon="lock"
           [outsideError]="true"
         ></app-form-field>
-
         <app-form-field
+          type="password"
           [form]="passwordForm"
           controlName="cNewPassword"
           label="Confirm New Password"

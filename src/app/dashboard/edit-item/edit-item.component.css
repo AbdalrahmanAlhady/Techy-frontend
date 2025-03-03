@@ -4,17 +4,16 @@ mat-grid-list {
 }
 
 .upload-cover {
-    padding: 25px;
-    width: fit-content;
-    margin: 0 auto;
+    padding: 15px;
     border-radius: 20px;
+    height: fit-content;
 }
 
 .no-img {
     background-color: #83838345;
     padding: 20px;
     border-radius: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 
 }
 
@@ -25,9 +24,8 @@ mat-grid-list {
 
 .product-form,
 .user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    column-gap: 3%;
+    width: 100%;
 }
 
 .form-row {
@@ -42,4 +40,7 @@ form {
 
 h1 {
     font-weight: bold
+}
+.mid-col{
+    width: 35%;
 }
