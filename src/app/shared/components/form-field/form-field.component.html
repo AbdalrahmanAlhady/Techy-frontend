@@ -1,24 +1,28 @@
-<div [formGroup]="form">
+<div [formGroup]="form" class="d-flex flex-column wrapper">
   <mat-form-field
+    [ngStyle]="outsideError ? { 'margin-bottom': '15px' } : {}"
     appearance="outline"
     *ngIf="form"
     [style.width.vw]="width"
+    [subscriptSizing]="outsideError ? 'dynamic' : 'fixed'"
+    hideRequiredMarker="true"
   >
     <mat-label>{{ label }}</mat-label>
     <input
-      *ngIf="controlName !== 'description'"
+      *ngIf="!textArea"
       matInput
       [formControlName]="controlName"
       [placeholder]="placeholder"
       [type]="type || 'text'"
     />
     <textarea
-      *ngIf="controlName === 'description'"
+      *ngIf="textArea"
       matInput
       [formControlName]="controlName"
       [placeholder]="placeholder"
       [type]="type || 'text'"
       cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
     ></textarea>
     <mat-icon matSuffix>{{ icon }}</mat-icon>
     <mat-error

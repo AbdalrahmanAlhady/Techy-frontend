@@ -4,6 +4,7 @@ import { Category } from '../../models/Category';
 import { BrandService } from '../../services/brand.service';
 import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
+import { query } from '@angular/animations';
 
 @Component({
   standalone: false,
@@ -71,10 +72,27 @@ export class FiltersComponent implements OnInit {
       .getProducts(this.productService.queryOptions)
       .subscribe({
         next: (result) => {
-          this.productService.filtersAppliedSignal.set(true);
+          this.productService.filtersAppliedSignal.set(false);
           this.productService.productsSignal.set(result.data.products || []);
         },
         error: (error) => console.error('Error fetching products:', error),
       });
+  }
+  resetFilters() {
+    this.selectedCategories = [];
+    this.selectedBrands = [];
+    this.selectedMaxPrice = this.priceRange.max;
+    this.selectedMinPrice = this.priceRange.min;
+    this.productService.queryOptions.filters = {};
+   
+    this.productService
+    .getProducts(this.productService.queryOptions)
+    .subscribe({
+      next: (result) => {
+        this.productService.filtersAppliedSignal.set(true);
+        this.productService.productsSignal.set(result.data.products || []);
+      },
+      error: (error) => console.error('Error fetching products:', error),
+    });
   }
 }

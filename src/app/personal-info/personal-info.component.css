@@ -1,0 +1,27 @@
+form {
+  margin: 20px auto;
+  width: 30%;
+}
+
+
+.account {
+  color: black;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+  width: max-content;
+  place-self: center;
+}
+
+a {
+  color: blue;
+  text-decoration: none;
+  cursor: pointer
+}
+
+.done-text {
+  margin: 25px;
+  font-size: 30px;
+  color: green;
+  text-align: center;
+}

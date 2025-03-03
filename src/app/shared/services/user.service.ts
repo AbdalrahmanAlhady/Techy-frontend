@@ -79,11 +79,11 @@ export class UserService {
   updateUser(
     id: string,
     role: string,
-    password: string,
     email: string,
     lastName: string,
     firstName: string,
-    verified: boolean
+    verified: boolean,
+    password: string|null
   ): Observable<MutationResult<{ updateUser: User }>> {
     return this.apollo.mutate<{ updateUser: User }>({
       mutation: UPDATE_USER_MUTATION,

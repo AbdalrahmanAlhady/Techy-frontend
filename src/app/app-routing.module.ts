@@ -10,6 +10,7 @@ import { AuthPageGuard } from './auth/services/authPage.guard.service';
 import { AuthGuard } from './auth/services/auth.guard.service';
 import { OrderComponent } from './myorders/order/order.component';
 import { MyordersComponent } from './myorders/myorders.component';
+import { PersonalInfoComponent } from './personal-info/personal-info.component';
 
 const routes: Routes = [
   { component: ProductsComponent, path: '', pathMatch: 'full' },
@@ -22,7 +23,13 @@ const routes: Routes = [
   },
   { component: SignupComponent, canActivate: [AuthPageGuard], path: 'signup' },
   { component: SigninComponent, canActivate: [AuthPageGuard], path: 'signin' },
+  { component: SigninComponent,  path: 'signin/:mode' },
   { component: MyordersComponent, canActivate: [AuthGuard], path: 'myorders' },
+  {
+    component: PersonalInfoComponent,
+    canActivate: [AuthGuard],
+    path: 'personal-info',
+  },
 ];
 
 @NgModule({

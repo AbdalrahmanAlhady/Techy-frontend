@@ -17,23 +17,31 @@
     <mat-divider></mat-divider>
     <mat-selection-list *ngIf="priceRange">
       <h3 matSubheader class="fw-bold">Price</h3>
-      <mat-slider
-        [min]="priceRange.min"
-        [max]="priceRange.max"
-        discrete
-      >
-        <input matSliderStartThumb value="priceRange.min" [(ngModel)]="selectedMinPrice" />
+      <mat-slider  [min]="priceRange.min" [max]="priceRange.max" discrete>
+        <input
+          matSliderStartThumb
+          value="priceRange.min"
+          [(ngModel)]="selectedMinPrice"
+        />
         <input matSliderEndThumb [(ngModel)]="selectedMaxPrice" />
       </mat-slider>
     </mat-selection-list>
     <mat-divider></mat-divider>
-    <button
-      mat-raised-button
-      color="primary"
-      class="mt-10 w-100"
-      (click)="filter()"
-    >
-      Filter
-    </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="mt-10 w-100 mb-2"
+        (click)="filter()"
+      >
+        Filter
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="mt-10 w-100"
+        (click)="resetFilters()"
+      >
+        Reset
+      </button>
   </mat-list>
 </div>

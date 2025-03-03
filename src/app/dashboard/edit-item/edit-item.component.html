@@ -6,8 +6,43 @@
     class="d-flex flex-column"
   >
     <!-- Product Form -->
-    <div *ngIf="entityType === 'Product'" class="product-form">
-      <div class="form-row">
+    <div
+      *ngIf="entityType === 'Product'"
+      class="d-flex flex-row product-form justify-content-center"
+    >
+      <!-- Product Cover -->
+      <div
+        class="d-flex flex-column align-items-center bg-light shadow upload-cover"
+      >
+        <p-image
+          *ngIf="productCoverUrl"
+          class="mb-2"
+          [src]="productCoverUrl"
+          alt="Image"
+          width="250"
+          height="250"
+        />
+        <div
+          *ngIf="!productCoverUrl"
+          class="d-flex flex-column align-items-center no-img"
+        >
+          <app-upload-svg [width]="10" [height]="10"></app-upload-svg>
+          <h2>Upload Product Cover</h2>
+          <p>Image size should be less than 2MB</p>
+        </div>
+        <p-fileupload
+          #fu
+          mode="basic"
+          chooseLabel="Choose"
+          chooseIcon="pi pi-upload"
+          name="demo[]"
+          url="https://www.primefaces.org/cdn/api/upload.php"
+          accept="image/*"
+          maxFileSize="2000000"
+          (onSelect)="onProductCoverSelect($event)"
+        ></p-fileupload>
+      </div>
+      <div class="d-flex flex-column mid-col">
         <app-form-field
           [form]="entityForm"
           controlName="name"
@@ -25,99 +60,69 @@
           icon="attach_money"
           type="number"
         ></app-form-field>
-      </div>
-      <div class="form-row">
         <app-form-field
           [form]="entityForm"
-          controlName="description"
-          label="Description"
-          placeholder="Enter description"
+          controlName="inventory"
+          label="Inventory"
+          placeholder="Enter inventory"
           [customValidator]="customValidator"
-          icon="description"
+          icon="inventory"
+          type="number"
         ></app-form-field>
-        <div class="d-flex flex-column">
-          <mat-form-field appearance="outline">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="category">
-              <mat-option
-                *ngFor="let category of categories"
-                [value]="category.id"
-              >
-                {{ category.name }}
-              </mat-option>
-            </mat-select>
-            <mat-icon matSuffix>category</mat-icon>
-            <mat-error
-              *ngIf="
-                entityForm.controls['category'].touched &&
-                entityForm.controls['category'].errors
-              "
+        <div class="d-flex flex-row">
+             <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.id"
             >
-              {{ customValidator.getErrorMessage("category", entityForm) }}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Brand</mat-label>
-            <mat-select formControlName="brand">
-              <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                {{ brand.name }}
-              </mat-option>
-            </mat-select>
-            <mat-icon matSuffix>branding_watermark</mat-icon>
-            <mat-error
-              *ngIf="
-                entityForm.controls['brand'].touched &&
-                entityForm.controls['brand'].errors
-              "
-            >
-              {{ customValidator.getErrorMessage("brand", entityForm) }}
-            </mat-error>
-          </mat-form-field>
-          <app-form-field
-            [form]="entityForm"
-            controlName="inventory"
-            label="Inventory"
-            placeholder="Enter inventory"
-            [customValidator]="customValidator"
-            icon="inventory"
-            type="number"
-          ></app-form-field>
-        </div>
-        <!-- Product Cover -->
-        <div
-          class="d-flex flex-column align-items-center bg-light shadow upload-cover"
-        >
-          <p-image
-            *ngIf="productCoverUrl"
-            class="mb-2"
-            [src]="productCoverUrl"
-            alt="Image"
-            width="250"
-            height="250"
-          />
-          <div
-            *ngIf="!productCoverUrl"
-            class="d-flex flex-column align-items-center no-img"
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+          <mat-error
+            *ngIf="
+              entityForm.controls['category'].touched &&
+              entityForm.controls['category'].errors
+            "
           >
-            <app-upload-svg [width]="10" [height]="10"></app-upload-svg>
-            <h2>Upload Product Cover</h2>
-            <p>Image size should be less than 2MB</p>
-          </div>
-          <p-fileupload
-            #fu
-            mode="basic"
-            chooseLabel="Choose"
-            chooseIcon="pi pi-upload"
-            name="demo[]"
-            url="https://www.primefaces.org/cdn/api/upload.php"
-            accept="image/*"
-            maxFileSize="2000000"
-            (onSelect)="onProductCoverSelect($event)"
-          ></p-fileupload>
+            {{ customValidator.getErrorMessage("category", entityForm) }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Brand</mat-label>
+          <mat-select formControlName="brand">
+            <mat-option *ngFor="let brand of brands" [value]="brand.id">
+              {{ brand.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>branding_watermark</mat-icon>
+          <mat-error
+            *ngIf="
+              entityForm.controls['brand'].touched &&
+              entityForm.controls['brand'].errors
+            "
+          >
+            {{ customValidator.getErrorMessage("brand", entityForm) }}
+          </mat-error>
+        </mat-form-field>
         </div>
       </div>
+      <div class="d-flex flex-column">
+      
+        <app-form-field
+        [form]="entityForm"
+        [textArea]="true"
+        controlName="description"
+        label="Description"
+        placeholder="Enter description"
+        [customValidator]="customValidator"
+        icon="description"
+        ></app-form-field>
+      </div>
     </div>
-
+      
     <!-- Brand Form -->
     <div *ngIf="entityType === 'Brand'" class="form-row">
       <app-form-field

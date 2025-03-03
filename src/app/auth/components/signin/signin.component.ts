@@ -2,7 +2,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from '../../services/customvalidation.service';
 import { AuthService } from '../../../shared/services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { LocalStorageService } from '../../../shared/services/local-storage.service';
@@ -34,7 +34,8 @@ export class SigninComponent {
     private localStorageService: LocalStorageService,
     private modalService: BsModalService,
     private shareDataService: ShareDataService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute
   ) {
     this.signinForm = this.formBuilder.group({
       email: [
@@ -60,7 +61,15 @@ export class SigninComponent {
       ],
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      if (params.get('mode') === 'fp') {
+        this.forgetPasswordMode = true
+        
+      }
+      
+    });
+  }
 
   signin(formData: { email: string; password: string }) {
     this.subscriptions.add(

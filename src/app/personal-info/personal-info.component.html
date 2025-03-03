@@ -1,0 +1,111 @@
+<div class="d-flex flex-column shadow m-4 p-4 mb-5">
+  <mat-tab-group>
+    <mat-tab label="Personal Information">
+      <form
+        class="d-flex flex-column"
+        [formGroup]="infoForm"
+        (ngSubmit)="updateInfo()"
+      >
+        <app-form-field
+          [form]="infoForm"
+          controlName="firstName"
+          label="First Name"
+          placeholder="Enter first name"
+          [customValidator]="customValidator"
+          icon="person"
+          [outsideError]="true"
+        ></app-form-field>
+
+        <app-form-field
+          [form]="infoForm"
+          controlName="lastName"
+          label="Last Name"
+          placeholder="Enter last name"
+          [customValidator]="customValidator"
+          icon="person"
+          [outsideError]="true"
+        ></app-form-field>
+
+        <app-form-field
+          [form]="infoForm"
+          controlName="email"
+          label="Email"
+          placeholder="Enter email"
+          [customValidator]="customValidator"
+          icon="email"
+          [outsideError]="true"
+        ></app-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="submit-btn"
+          [disabled]="!formHasChanged || !infoForm.valid"
+        >
+          Update Information
+        </button>
+      </form>
+    </mat-tab>
+    <mat-tab label="Change Password">
+      <form
+        class="d-flex flex-column"
+        [formGroup]="passwordForm"
+        (ngSubmit)="updatePassword()"
+      >
+        <app-form-field
+        type="password"
+          [form]="passwordForm"
+          controlName="currentPassword"
+          label="current Password"
+          placeholder="Enter Current Password"
+          [customValidator]="customValidator"
+          icon="lock"
+          [outsideError]="true"
+        ></app-form-field>
+        <app-form-field
+          type="password"
+          [form]="passwordForm"
+          controlName="newPassword"
+          label="New Password"
+          placeholder="Enter password"
+          [customValidator]="customValidator"
+          icon="lock"
+          [outsideError]="true"
+        ></app-form-field>
+        <app-form-field
+          type="password"
+          [form]="passwordForm"
+          controlName="cNewPassword"
+          label="Confirm New Password"
+          placeholder="Confirm New password"
+          [customValidator]="customValidator"
+          icon="lock"
+          [outsideError]="true"
+        ></app-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="submit-btn"
+          [disabled]="!passwordForm.valid"
+        >
+          Update Password
+        </button>
+        <p class="account">
+          Forget your password?
+          <a style="color: blue" [routerLink]="'/signin/fp'">reset password</a>
+        </p>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+  <div *ngIf="backendError" class="alert alert-danger">{{ backendError }}</div>
+  <!-- update password done modal -->
+  <ng-template #doneModal>
+    <app-modal [modalRef]="modalRef" [title]="'Done'">
+      <app-update-done-svg [width]="100" [height]="70"></app-update-done-svg>
+      <p class="done-text">Information Updated</p>
+    </app-modal>
+  </ng-template>
+</div>

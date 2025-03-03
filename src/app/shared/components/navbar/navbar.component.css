@@ -5,4 +5,9 @@ mat-icon {
 app-logo {
     cursor: pointer;
 }
-
+.controls{
+    place-items: center;
+}
+.alert-link{
+    cursor: pointer;
+}

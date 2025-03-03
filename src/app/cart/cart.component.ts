@@ -135,10 +135,6 @@ export class CartComponent implements OnInit {
     if (this.orderItems.length === 0) {
       this.router.navigate(['/']);
     }
-    setTimeout(() => {
-      this.modalRef = this.modalService.show(this.paymentModal);
-      this.paymentDone = true;
-    }, 1000);
   }
   calcTotal() {
     let total = 0;
