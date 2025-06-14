@@ -49,7 +49,7 @@ export class ProductPaginationComponent implements OnInit {
           this.productService.currentProductsPageSignal.set(
             this.productService.currentProductsPageSignal() + 1
           );
-          this.productService.productsSignal.set(result.data.products || []);
+          this.productService.productsSignal.set(result.data.products.products || []);
         },
         error: (error) => console.error('Error fetching products:', error),
       });

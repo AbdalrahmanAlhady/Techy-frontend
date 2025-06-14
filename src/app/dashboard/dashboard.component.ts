@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit {
       id?: string;
     }) => Observable<
       ApolloQueryResult<
-        | { products: Product[] }
+        | { products: { products: Product[]; count: number } }
         | { categories: Category[] }
         | { brands: Brand[] }
         | { orders: Order[] }

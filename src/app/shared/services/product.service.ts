@@ -81,8 +81,12 @@ export class ProductService {
   getProducts(
     options?: GQLQueryOptions,
     id?: string
-  ): Observable<ApolloQueryResult<{ products: Product[] }>> {
-    return this.apollo.watchQuery<{ products: Product[] }>({
+  ): Observable<
+    ApolloQueryResult<{ products: { products: Product[]; count: number } }>
+  > {
+    return this.apollo.watchQuery<{
+      products: { products: Product[]; count: number };
+    }>({
       query: GET_PRODUCTS_QUERY,
       variables: {
         id: id,
