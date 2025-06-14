@@ -73,7 +73,7 @@ export class FiltersComponent implements OnInit {
       .subscribe({
         next: (result) => {
           this.productService.filtersAppliedSignal.set(false);
-          this.productService.productsSignal.set(result.data.products || []);
+          this.productService.productsSignal.set(result.data.products.products || []);
         },
         error: (error) => console.error('Error fetching products:', error),
       });
@@ -90,7 +90,7 @@ export class FiltersComponent implements OnInit {
     .subscribe({
       next: (result) => {
         this.productService.filtersAppliedSignal.set(true);
-        this.productService.productsSignal.set(result.data.products || []);
+        this.productService.productsSignal.set(result.data.products.products || []);
       },
       error: (error) => console.error('Error fetching products:', error),
     });

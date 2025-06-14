@@ -41,7 +41,7 @@ export class ProductsComponent implements OnInit {
       .getProducts(this.productService.queryOptions)
       .subscribe({
         next: (result) => {
-          this.products = result.data.products || [];
+          this.products = result.data.products.products || [];
           this.productService.productsSignal.set(this.products);
         },
         error: (error) => console.error('Error fetching products:', error),
@@ -81,7 +81,7 @@ export class ProductsComponent implements OnInit {
     console.log('view product:', productId);
     this.productService.getProducts(undefined, productId).subscribe({
       next: (result) => {
-        let product = result.data.products[0];
+        let product = result.data.products.products[0];
         console.log('product:', result.data.products);
         this.localStorageService.removeItem('viewProduct');
         this.localStorageService.setItem('viewProduct', product);

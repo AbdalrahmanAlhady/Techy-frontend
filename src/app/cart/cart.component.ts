@@ -85,7 +85,7 @@ export class CartComponent implements OnInit {
         Validators.compose([
           Validators.required,
           Validators.minLength(1),
-          Validators.maxLength(10),
+          Validators.maxLength(3),
         ]),
       ],
       buildingNumber: [
@@ -248,5 +248,8 @@ export class CartComponent implements OnInit {
   }
   closePaymentModal() {
     this.modalRef?.hide();
+  }
+  backToShopping() {
+    this.router.navigate(['/']);
   }
 }

@@ -23,26 +23,29 @@ export const GET_PRODUCTS_PRICE_RANGE_QUERY = gql`
   }
 `;
 export const GET_PRODUCTS_QUERY = gql`
-  query Query($options: QueryOptionsInput, $id: String) {
+  query GetProducts($options: QueryOptionsInput, $id: String) {
     products(options: $options, id: $id) {
-      id
-      name
-      cover
-      description
-      inventory
-      price
-      brand {
+      count
+      products {
         id
         name
-      }
-      category {
-        id
-        name
-      }
-      vendor {
-        id
-        firstName
-        lastName
+        cover
+        description
+        inventory
+        price
+        brand {
+          id
+          name
+        }
+        category {
+          id
+          name
+        }
+        vendor {
+          id
+          firstName
+          lastName
+        }
       }
     }
   }

@@ -6,8 +6,8 @@ export interface OrderItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  product?: Product;
   productId: string;
+  product?: Product;
   order?: Order;
   orderId?: string;
 }
